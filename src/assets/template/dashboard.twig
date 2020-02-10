@@ -1,1 +1,15 @@
 <script src="assets/js/mainView.js"></script>
+<h3>Welcome</h3>
+
+<div class="card-holder">
+
+    {% for card in cards %}
+        <div class="card">
+            <div class="icon">
+                <i class="{{ card.icon }}"></i>
+            </div>
+            <div class="name">{{ card.name }}</div>
+        </div>
+    {% endfor %}
+
+</div>

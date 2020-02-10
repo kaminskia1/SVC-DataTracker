@@ -14,46 +14,73 @@ class Template
      * Security is tight here, as any listed public, static, function can be called by the requester.
      */
 
-    public static function dashboard(): bool
+    public static function dashboard(): array
     {
-        return false;
+        return [true, \SVC\Init::$twig->load("dashboard.twig")->render([
+            'cards' => [
+                [
+                    'icon' => 'fa fa-users',
+                    'name' => "View People"
+                ],
+                [
+                    'icon' => 'fa fa-plus',
+                    'name' => "Add Person"
+                ],
+                [
+                    'icon' => 'fa fa-money',
+                    'name' => "View Aid"
+                ],
+                [
+                    'icon' => 'fa fa-plus',
+                    'name' => "Add Aid"
+                ],
+                [
+                    'icon' => 'fa fa-file',
+                    'name' => "View Reports"
+                ],
+                [
+                    'icon' => 'fa fa-plus',
+                    'name' => "Add Reports"
+                ],
+            ]
+        ])];
     }
 
-    public static function personList(): bool
+    public static function personList(): array
     {
-        return false;
+        return [true, ""];
     }
 
-    public static function personAdd(): bool
+    public static function personAdd(): array
     {
-        return false;
+        return [true, ""];
     }
 
-    public static function personView(): bool
+    public static function personView(): array
     {
-        return false;
+        return [true, ""];
     }
 
-    public static function aidList(): bool
+    public static function aidList(): array
     {
-        return false;
+        return [true, ""];
     }
-    public static function aidAdd(): bool
+    public static function aidAdd(): array
     {
-        return false;
-    }
-
-    public static function aidView(): bool
-    {
-        return false;
+        return [true, ""];
     }
 
-    public static function reportList(): bool
+    public static function aidView(): array
     {
-        return false;
+        return [true, ""];
     }
-    public static function reportGenerate(): bool
+
+    public static function reportList(): array
     {
-        return false;
+        return [true, ""];
+    }
+    public static function reportGenerate(): array
+    {
+        return [true, ""];
     }
 }

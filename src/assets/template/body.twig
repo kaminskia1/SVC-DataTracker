@@ -22,10 +22,10 @@
 
     <body>
 
-        {% include  'header.twig' %}
+        {% include 'header.twig' %}
 
         <div class="viewport">
-            {% include view %}
+            {{ view|raw }}
         </div>
 
     </body>

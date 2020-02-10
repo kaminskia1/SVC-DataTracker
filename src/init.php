@@ -59,27 +59,6 @@ class Init
             'strict_variables' => true,
         ] );
 
-        // Check if session provided
-        if ( !is_null( \SVC\System\Request::i()->session ) && ( \mb_strlen( \SVC\System\Request::i()->session ) == 32 ) && \SVC\System\Session::verify( \SVC\System\Request::i()->session ) )
-        {
-            // Grab preexisting session
-            static::$session = \SVC\System\Session::grabSession( \SVC\System\Request::i()->session );
-
-            // Refresh session cookie
-            \SVC\System\Request::setCookie( 'session', static::$session->token );
-            \SVC\System\Request::i()->setCookie( 'username', "", time() - 3600 );
-            \SVC\System\Request::i()->setCookie( 'profile', "", time() - 3600 );
-        }
-        else if ( !is_null( \SVC\System\Request::i()->username ) && !is_null( \SVC\System\Request::i()->username ) && \SVC\System\API::i()->verifyProfileAndUsername( \SVC\System\Request::i()->username, \SVC\System\Request::i()->profile ) )
-        {
-            // Create new session
-            static::$session = \SVC\System\Session::createSession( \SVC\System\API::i()->usernameToPrettyUsername( \SVC\System\Request::i()->username ), \SVC\System\Request::i()->profile );
-
-            // Bind session id to cookie
-            \SVC\System\Request::setCookie( 'session', static::$session->token );
-            \SVC\System\Request::i()->setCookie( 'username', "", time() - 3600 );
-            \SVC\System\Request::i()->setCookie( 'profile', "", time() - 3600 );
-        }
         return new self();
     }
 
@@ -89,16 +68,33 @@ class Init
      *
      * @TODO Segregate child calls to separate classes, frontend to Init->Frontend and backend into Init->Backend
      *
-     * @throws \Twig\Error\LoaderError
+     * @return void
      * @throws \Twig\Error\RuntimeError
      * @throws \Twig\Error\SyntaxError
-     * @return void
+     * @throws \ReflectionException
+     * @throws \Twig\Error\LoaderError
      */
     public function frontend(): void
-    {        // Clear output buffer before displaying if not in debug
-        ! \SVC\Config::$debug ? ob_clean() : null;
+    {
+        // Gather and validate view
+        $view = \SVC\System\Request::i()->view ?? "dashboard";
+
+        if ( method_exists( new \SVC\System\Template(), $view ) )
+        {
+            $ref = new \ReflectionMethod( new \SVC\System\Template(), $view );
+            if ( $ref->isPublic() )
+            {
+                // Clear output buffer before displaying if not in debug
+                ! \SVC\Config::$debug ? ob_clean() : null;
+
+                $view = \SVC\System\Template::$view();
+
+                $view = $view[0] ? $view[1] : \SVC\System\Template::dashboard()[1];
+            }
+        }
+
         echo static::$twig->load("body.twig")->render([
-            'view'=>'dashboard.twig',
+            'view'=> $view,
             'navbar' => [
 
                 [
@@ -185,16 +181,33 @@ class Init
                             {
                                 // Clear output buffer before displaying if not in debug
                                 ! \SVC\Config::$debug ? ob_clean() : null;
-
-                                if ( \SVC\System\Template::$callback() )
+                                $callback = \SVC\System\Template::$callback();
+                                if ( $callback[0] )
                                 {
-                                    exit;
+                                    die( $callback[1] );
                                 }
                             }
                         }
                     }
                     \SVC\System\HTTPError::i(405, "Method not allowed");
                     break;
+
+                case 'push':
+                    if ( !is_null( $callback = \SVC\System\Request::i()->callback ) && !is_null( $data = \SVC\System\Request::i()->data ) )
+                    {
+                        if ( method_exists( new \SVC\System\Template(), $callback ) )
+                        {
+                            $ref = new \ReflectionMethod(new \SVC\System\Push(), $callback );
+                            if ($ref->isPublic())
+                            {
+                                die( \SVC\System\Push::i()->$callback( $data ) );
+                            }
+                            \SVC\System\HTTPError::i(405, "Method not allowed");
+                        }
+                    }
+                    \SVC\System\HTTPError::i(400, "Invalid parameters");
+                    break;
+
                 default:
                     \SVC\System\HTTPError::i(400, "Invalid parameters");
                     break;
