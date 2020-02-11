@@ -65,6 +65,7 @@ class Template
     {
         return [true, ""];
     }
+
     public static function aidAdd(): array
     {
         return [true, ""];
@@ -79,6 +80,7 @@ class Template
     {
         return [true, ""];
     }
+
     public static function reportGenerate(): array
     {
         return [true, ""];

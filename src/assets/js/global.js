@@ -24,6 +24,7 @@ $(document).ready(()=>
     // Navigation Bar Requests
     $("nav>ul>li").click((a)=>
     {
+        console.log( window.appendToUrl( "view", a.currentTarget.id ));
         $.post({
             url: document.location.href,
             cache: false,
@@ -33,6 +34,7 @@ $(document).ready(()=>
             },
             success: (a)=>
             {
+
                 $("body>div.viewport").html(a);
                 if ( $("nav").hasClass("active") )
                 {
@@ -42,7 +44,7 @@ $(document).ready(()=>
         });
     });
 
-    // Appends a (key => value) to the url without reloading. Useful for tracking subpages
+    // Appends a (key => value) to the url without reloading. Used for tracking subpages
     window.appendToUrl =  function(k, v)
     {
         let u = window.location.href.split('?');

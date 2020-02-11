@@ -6,7 +6,8 @@
     "twig/twig": "^3.0",
     "ext-curl": "*",
     "ext-json": "*",
-    "ext-openssl": "*"
+    "ext-openssl": "*",
+    "ext-pdo": "*"
   },
   "license": "MIT",
   "authors": [

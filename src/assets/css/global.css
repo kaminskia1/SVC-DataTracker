@@ -117,6 +117,7 @@ nav ul li .icon {
     display: inline-block;
     padding: 0px 22px 0px 22px;
     height: 44px;
+    width: 1px;
 }
 
 nav ul li .name {

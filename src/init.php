@@ -17,14 +17,6 @@ class Init
 {
 
     /**
-     * Current user session.
-     *
-     * @global \SVC\Init::$session
-     * @var Session
-     */
-    public static $session;
-
-    /**
      * Twig environment loader. Declared statically to allow for calls from anywhere
      *
      * @global \SVC\Init::$loader
@@ -69,10 +61,7 @@ class Init
      * @TODO Segregate child calls to separate classes, frontend to Init->Frontend and backend into Init->Backend
      *
      * @return void
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
      * @throws \ReflectionException
-     * @throws \Twig\Error\LoaderError
      */
     public function frontend(): void
     {
@@ -88,12 +77,11 @@ class Init
                 ! \SVC\Config::$debug ? ob_clean() : null;
 
                 $view = \SVC\System\Template::$view();
-
-                $view = $view[0] ? $view[1] : \SVC\System\Template::dashboard()[1];
             }
         }
+        $view = is_array( $view ) && $view[0] ? $view[1] : \SVC\System\Template::dashboard()[1];
 
-        echo static::$twig->load("body.twig")->render([
+        die( static::$twig->load("body.twig")->render([
             'view'=> $view,
             'navbar' => [
 
@@ -102,7 +90,7 @@ class Init
                     'title'=>"Main",
                 ],
                 [
-                    'icon'=>'fa fa-lock',
+                    'icon'=>'fa fa-home',
                     'callback'=>'dashboard',
                     'public_name'=>"Dashboard",
                 ],
@@ -112,12 +100,12 @@ class Init
                     'title'=>"People",
                 ],
                 [
-                    'icon'=>'fa fa-cogs',
+                    'icon'=>'fa fa-users',
                     'callback'=>'personList',
                     'public_name'=>'View People',
                 ],
                 [
-                    'icon'=>'fa fa-sign-out',
+                    'icon'=>'fa fa-plus',
                     'callback'=>'personAdd',
                     'public_name'=>"Add Person",
                 ],
@@ -127,12 +115,12 @@ class Init
                     'title'=>"Aid",
                 ],
                 [
-                    'icon'=>'fa fa-cogs',
+                    'icon'=>'fa fa-money',
                     'callback'=>'aidView',
                     'public_name'=>'View Aid',
                 ],
                 [
-                    'icon'=>'fa fa-sign-out',
+                    'icon'=>'fa fa-plus',
                     'callback'=>'aidAdd',
                     'public_name'=>"Add Aid",
                 ],
@@ -142,18 +130,18 @@ class Init
                     'title'=>"Report",
                 ],
                 [
-                    'icon'=>'fa fa-cogs',
+                    'icon'=>'fa fa-file',
                     'callback'=>'reportList',
                     'public_name'=>'View Reports',
                 ],
                 [
-                    'icon'=>'fa fa-sign-out',
+                    'icon'=>'fa fa-plus',
                     'callback'=>'reportGenerate',
                     'public_name'=>"Generate Report",
                 ],
 
             ]
-        ]);
+        ]));
     }
 
 

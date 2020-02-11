@@ -16,21 +16,19 @@ class HTTPError
         switch ( $http_code ) {
             case 401:
                 header("HTTP/1.1 401 Unauthorized");
-                http_response_code(401);
-                exit;
+                break;
             case 403:
                 header("HTTP/1.1 403 Forbidden");
-                http_response_code(404);
-                exit;
+                break;
             case 404:
                 header("HTTP/1.1 401 Not Found");
-                http_response_code(404);
-                exit;
+                break;
             default:
-                http_response_code($http_code);
-                echo $message;
-                exit;
+                break;
         }
+        http_response_code($http_code);
+        echo $message;
+        exit;
 
     }
 }

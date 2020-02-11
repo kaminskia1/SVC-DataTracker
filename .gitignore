@@ -104,3 +104,4 @@ fabric.properties
 src/scratch.txt
 src/test.php
 src/session/*.json
+src/assets/svc.db-journal
