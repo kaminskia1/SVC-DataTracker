@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="svc" uuid="2f8ffacd-1a84-4808-96d2-3320a01bdd80">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:C:\Users\kaminskia\Desktop\phpdesktop-chrome-57.0-rc-php-7.1.3\www\src\assets\svc.db</jdbc-url>
+    </data-source>
+  </component>
+</project>

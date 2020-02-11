@@ -24,5 +24,11 @@ class Config
      */
     public static $assetDirectory = "assets\\";
 
+    /**
+     * Location of the database file
+     *
+     * @var string
+     */
+    public static $database = "svc.db";
 }
 

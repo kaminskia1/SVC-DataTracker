@@ -44,6 +44,9 @@ class Init
             require( __DIR__ . "\\" . mb_substr($class, 4) . ".php");
         });
 
+        // Declare database
+        \SVC\System\PDO::assign( "sqlite:" . \SVC\Config::$assetDirectory . \SVC\Config::$database );
+    
         // Declare Twig loader and environment
         static::$loader = new FilesystemLoader(\SVC\Config::$assetDirectory . "template" );
         static::$twig = new Environment( static::$loader, [
