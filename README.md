@@ -20,3 +20,42 @@ Report
 	View Reports => reportList
 	Generate Report => reportGenerate
 ```
+
+
+
+
+## table `Person`
+
+id int
+date TIMESTAMP
+firstname string
+lastname string
+phone string
+address string
+assistancetype string
+shutoff/evict bool
+	date if true
+	referredby if true
+familysize int
+	familydata text
+	children + age, adults, seniors
+employed bool
+	placeofenployment string
+extradata text
+
+
+
+
+
+## table `aid`
+
+foodbagcount int
+giftcardcount (15/26)
+vouchers
+	clothing
+	furniture
+	utilities
+account #
+rentcost
+landlordaddress
+extradata text
