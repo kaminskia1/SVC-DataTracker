@@ -21,38 +21,31 @@ class PDO
     private $query;
 
     /**
-     * @var string Query type
+     * @var array Query call stack
      */
-    private $type;
+    private $callStack = [];
 
     /**
-     * @var string Query table
+     * @var array Available type calls
      */
-    private $table;
+    private const typeCalls = [
+        "select" => "SELECT",
+        "update" => "UPDATE",
+        "insert" => "INSERT INTO",
+        "delete" => "DELETE FROM",
+        "drop" => "DROP TABLE",
+    ];
 
-    /**
-     * @var string Query params
-     */
-    private $params;
 
-    /**
-     * @var string Query row limit
-     */
-    private $limit;
-
-    /**
-     * @var string Query order direction
-     */
-    private $order;
 
     /**
      * Bind the SQLite database to the class
      *
-     * @param $dsn
+     * @param string $dsn
      * @param string $user
      * @param string $pass
      */
-    public static function assign( $dsn, string $user = "", string $pass = "" ): void
+    public static function assign( string $dsn, string $user = "", string $pass = "" ): void
     {
         try
         {
@@ -74,57 +67,49 @@ class PDO
     }
 
     /**
-     * Set the query type to select
+     * Combine all setter functions into one
      *
-     * @return $this
+     * @param string $call
+     * @param array $args [optional]
+     * @return self
+     * @throws \InvalidArgumentException
      */
-    public function select(): self
+    public function __call( string $call, array $args = [] ): self
     {
-        $this->type = "SELECT";
+        // Check if type
+        in_array( strtolower( $call ), $this::typeCalls ) ? $arr = [ 'type' => $this::typeCalls[ strtolower( $call ) ] ] : null;
+
+        // Check if table
+        strtolower( $call ) === "table" ? $arr = [ 'table' => $args[0] ] : null;
+
+        // Check if params
+        strtolower( $call ) == "params" ? $arr = [ 'params' => $args ] : null;
+
+        // Check if limit
+        strtolower( $call ) === "limit" ? $arr = [ 'limit' => "LIMIT $args[0]" ] : null;
+
+        // Check if order
+        strtolower( $call ) === "order" ? $arr = [ 'order' => "ORDER BY $args[0]" ] : null;
+
+        // Verify that call exists
+        if ( !isset( $arr ) ) throw new \InvalidArgumentException();
+
+        array_merge($this->callStack, $arr);
+
         return $this;
     }
 
     /**
-     * Set the query type to insert
+     * Push custom data to the callstack
      *
+     * @param string $text
+     * @param bool $padding [optional]
+     * @param string $name [optional]
      * @return $this
      */
-    public function insert(): self
+    private function add( string $text, bool $padding = true, string $name = 'custom' ): self
     {
-        $this->type = "INSERT";
-        return $this;
-    }
-
-    /**
-     * Set the query type to delete
-     *
-     * @return $this
-     */
-    public function delete(): self
-    {
-        $this->type = "DELETE FROM";
-        return $this;
-    }
-
-    /**
-     * Set the query type to drop
-     *
-     * @return $this
-     */
-    public function drop(): self
-    {
-        $this->type = "DROP TABLE";
-        return $this;
-    }
-
-    /**
-     * Set the query type to update
-     *
-     * @return $this
-     */
-    public function update(): self
-    {
-        $this->type = "UPDATE";
+        array_merge($this->callStack, [ $name => $padding ? " {$text} " : $text ] );
         return $this;
     }
 
@@ -135,13 +120,15 @@ class PDO
      */
     private function _compileQuery(): void
     {
-        $data = [
-            'type' => $this->type,
-            'table' => $this->table,
-            'params' => $this->params,
-            'limit' => $this->limit,
-            'order' => $this->order,
-        ];
+        /*
+          Reference
+            $data = [
+            'type' => str
+            'table' => str
+            'params' => str
+            'limit' => int
+            'order' => str
+          ]; */
     }
 
     /**
