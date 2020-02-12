@@ -18,6 +18,6 @@ switch ( $_SERVER['REQUEST_METHOD'] )
         \SVC\Init::i()->backend();
         break;
     default:
-        \SVC\System\HTTPError::i(405, "Invalid request method!");
+        \SVC\System\HTTP::error(405, "Invalid request method!");
         break;
 }

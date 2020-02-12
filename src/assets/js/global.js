@@ -1,5 +1,30 @@
 $(document).ready(()=>
 {
+    // Internet status
+    window.connected = function() {
+        $.post({
+            url: document.location.href,
+            cache: false,
+            data: {
+                do: "connection",
+            },
+            success: (a)=>
+            {
+                $("body>header>span.internet-status>span.connection").removeClass("connected disconnected unknown").addClass(a ? 'connected' : 'disconnected').prop("title", a ? "You are connected to the internet." : "You are not connected to the internet.");
+
+            }
+        });
+    };
+
+    // Internet status loop, check every minute
+    window.connected();
+    setTimeout(()=>
+    {
+        window.connected();
+    }, 60000);
+
+
+
     // Navigation Bar Toggle
     $("header>i").click(()=>
     {

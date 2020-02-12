@@ -20,7 +20,7 @@ class Init
      * Twig environment loader. Declared statically to allow for calls from anywhere
      *
      * @global \SVC\Init::$loader
-     * @var LoaderInterface
+     * @var \Twig\Loader\LoaderInterface
      */
     public static $loader;
 
@@ -28,7 +28,7 @@ class Init
      * Twig environment. Declared statically to allow for calls from anywhere
      *
      * @global \SVC\Init::$twig
-     * @var Environment
+     * @var \Twig\Environment
      */
     public static $twig;
 
@@ -60,8 +60,6 @@ class Init
 
     /**
      * Frontend call manager
-     *
-     * @TODO Segregate child calls to separate classes, frontend to Init->Frontend and backend into Init->Backend
      *
      * @return void
      * @throws \ReflectionException
@@ -162,6 +160,8 @@ class Init
         {
             switch( \SVC\System\Request::i()->do )
             {
+                case 'connection':
+                    die( (bool)\SVC\System\HTTP::internetConnection() );
                 case 'template':
                     if ( !is_null( $callback = \SVC\System\Request::i()->callback ) )
                     {
@@ -180,7 +180,7 @@ class Init
                             }
                         }
                     }
-                    \SVC\System\HTTPError::i(405, "Method not allowed");
+                    \SVC\System\HTTP::error(405, "Method not allowed");
                     break;
 
                 case 'push':
@@ -193,20 +193,20 @@ class Init
                             {
                                 die( \SVC\System\Push::i()->$callback( $data ) );
                             }
-                            \SVC\System\HTTPError::i(405, "Method not allowed");
+                            \SVC\System\HTTP::error(405, "Method not allowed");
                         }
                     }
-                    \SVC\System\HTTPError::i(400, "Invalid parameters");
+                    \SVC\System\HTTP::error(400, "Invalid parameters");
                     break;
 
                 default:
-                    \SVC\System\HTTPError::i(400, "Invalid parameters");
+                    \SVC\System\HTTP::error(400, "Invalid parameters");
                     break;
             }
         }
         else
         {
-            \SVC\System\HTTPError::i(400, "Bad Request");
+            \SVC\System\HTTP::error(400, "Bad Request");
         }
     }
 }

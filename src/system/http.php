@@ -8,9 +8,9 @@ if ( !defined("ENABLE") || @ENABLE != true )
     exit;
 }
 
-class HTTPError
+class HTTP
 {
-    static public function i( int $http_code, string $message = "" ): void
+    static public function error(int $http_code, string $message = "" ): void
     {
         // Search for the provided HTTP Error code
         switch ( $http_code ) {
@@ -29,6 +29,20 @@ class HTTPError
         http_response_code($http_code);
         echo $message;
         exit;
+    }
 
+    /**
+     * Check internet connection status
+     *
+     * @return bool
+     */
+    static public function internetConnection(): bool
+    {
+        // Generate a temporary socket to check connection
+        if ( @fsockopen('www.google.com', 80, $num, $error, 2) != false )
+        {
+            return true;
+        }
+        return false;
     }
 }
