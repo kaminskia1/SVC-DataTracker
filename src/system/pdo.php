@@ -50,7 +50,7 @@ class PDO
         try
         {
             static::$PDO = new \PDO($dsn, $user, $pass);
-        } catch(\PDOException $e)
+        } catch( \PDOException $e )
         {
             die("Could not bind to the database!");
         }
@@ -91,6 +91,9 @@ class PDO
         // Check if order
         strtolower( $call ) === "order" ? $arr = [ 'order' => "ORDER BY $args[0]" ] : null;
 
+        // Check if where
+        strtolower( $call ) === "where" ? $arr = [ 'where' => $args[0] ] : null;
+
         // Verify that call exists
         if ( !isset( $arr ) ) throw new \InvalidArgumentException();
 
@@ -126,10 +129,96 @@ class PDO
             'type' => str
             'table' => str
             'params' => str
+            'where' => str|array
             'limit' => int
             'order' => str
           ]; */
+
+        $stmt = "";
+
+        foreach ( $this->callStack as $k => $v )
+        {
+            switch ( $k )
+            {
+                case 'params':
+                    switch ( $this->callStack['type'] )
+                    {
+                        case 'INSERT INTO':
+                            $ik = [];
+                            $iv = [];
+
+                            // Check if array
+                            if ( is_array( $v ) )
+                            {
+                                // Check array dimensions
+                                if ( is_array( $v[0] ) )
+                                {
+                                    // Two dimensional
+                                    foreach ( $v as $arr)
+                                    {
+                                        foreach ($arr as $jk => $jv)
+                                        {
+                                            // Separate keys and values into their own arrays
+                                            if (!in_array($jk, $ik))
+                                            {
+                                                array_push($ik, $jk);
+                                            }
+                                            array_push($iv, $jv);
+                                        }
+                                        array_push($iv, "(" . implode(",", $iv) . ") ");
+                                    }
+                                }
+                                else
+                                {
+                                    // One dimensional
+                                    foreach ($k as $jk => $jv)
+                                    {
+                                        // Separate keys and values into their own arrays
+                                        if (!in_array($jk, $ik))
+                                        {
+                                            array_push($ik, $jk);
+                                        }
+                                        array_push($iv, $jv);
+                                    }
+                                    $iv = "(" . implode(",", $iv) . ") ";
+                                }
+                                $ik = "(" . implode(",", $ik) . ") ";
+                                $stmt .= $ik . " VALUES " . (is_array($iv) ? explode(",", $iv) : $iv) . " ";
+
+                            }
+                            else
+                            {
+                                $stmt .= "$v ";
+                            }
+                            break;
+                        case 'SELECT':
+                            $stmt .= (is_array($v) ? implode(",", $v) : $v) . " ";
+                            break;
+                        default:
+                            $stmt .= "$v ";
+                    }
+                    break;
+                case 'where':
+                    $stmt .= $this->_compileWhereClause($v) . " ";
+                    break;
+
+                default:
+                    $stmt .= "$v ";
+            }
+        }
     }
+
+    /**
+     * Compile a where clause based off provided information
+     *
+     * @param $data
+     * @return string
+     */
+    protected function _compileWhereClause($data): string
+    {
+
+    }
+
 
     /**
      * Run the query

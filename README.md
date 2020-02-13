@@ -32,7 +32,7 @@ firstname string
 lastname string
 phone string
 address string
-assistancetype string
+assistancetype string // Convert to enumeration
 shutoff/evict bool
 	date if true
 	referredby if true
