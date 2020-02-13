@@ -48,6 +48,12 @@ class Template
 
     public static function personList(): array
     {
+        $query = \SVC\System\PDO::i()
+            ->select()
+            ->params("*")
+            ->table("person")
+            ->run();
+        var_dump($query);
         return [true, ""];
     }
 

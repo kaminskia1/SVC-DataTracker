@@ -77,13 +77,13 @@ class PDO
     public function __call( string $call, array $args = [] ): self
     {
         // Check if type
-        in_array( strtolower( $call ), $this::typeCalls ) ? $arr = [ 'type' => $this::typeCalls[ strtolower( $call ) ] ] : null;
+        array_key_exists( strtolower( $call ), $this::typeCalls ) ? $arr = [ 'type' => $this::typeCalls[ strtolower( $call ) ] ] : null;
 
         // Check if table
         strtolower( $call ) === "table" ? $arr = [ 'table' => $args[0] ] : null;
 
         // Check if params
-        strtolower( $call ) == "params" ? $arr = [ 'params' => $args ] : null;
+        strtolower( $call ) == "params" ? $arr = [ 'params' => $args[0] ] : null;
 
         // Check if limit
         strtolower( $call ) === "limit" ? $arr = [ 'limit' => "LIMIT $args[0]" ] : null;
@@ -97,8 +97,7 @@ class PDO
         // Verify that call exists
         if ( !isset( $arr ) ) throw new \InvalidArgumentException();
 
-        array_merge($this->callStack, $arr);
-
+        $this->callStack = array_merge($this->callStack, $arr);
         return $this;
     }
 
@@ -121,7 +120,7 @@ class PDO
      *
      * @return void
      */
-    private function _compileQuery(): void
+    private function _compileQuery(): string
     {
         /*
           Reference
@@ -192,7 +191,7 @@ class PDO
                             }
                             break;
                         case 'SELECT':
-                            $stmt .= (is_array($v) ? implode(",", $v) : $v) . " ";
+                            $stmt .= (is_array($v) ? implode(",", $v) : $v) . " FROM ";
                             break;
                         default:
                             $stmt .= "$v ";
@@ -202,10 +201,13 @@ class PDO
                     $stmt .= $this->_compileWhereClause($v) . " ";
                     break;
 
+                case 'custom':
+                    $stmt .= $v;
                 default:
                     $stmt .= "$v ";
             }
         }
+        return $stmt;
     }
 
     /**
@@ -224,12 +226,11 @@ class PDO
      * Run the query
      *
      * @param null|string $query
-     * @return false|\PDOStatement
+     * @return false|\PDOStatement|\SVC\System\PDOSelect
      */
     public function run( $query = null )
     {
-        if ( isset( $this->type ) ) $this->_compileQuery();
-        return static::$PDO->query( $query ?: $this->query );
+        return $this->callStack['type'] === "SELECT" ? new \SVC\System\PDOSelect( static::$PDO->prepare( $query ?: $this->_compileQuery() ) ) : static::$PDO->prepare( $query ?: $this->_compileQuery() );
     }
 
 
