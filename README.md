@@ -1,41 +1,45 @@
 # SVC-People-Tracker
 
+### Requirements
+	- composer
+	- php (>7.1.3)
+	
 ### Site Map
 ```
-    /index.php
-        => GET
-            => dashboard.twig
-            => personList.twig
-                => personView.twig
+/index.php
+    => GET
+        => dashboard.twig
+        => personList.twig
+    	    => personView.twig
 
-            => personAdd.twig
-            => aidView.twig
-            => aidAdd.twig
-            => reportList.twig
-            => reportGenerate.twig
+        => personAdd.twig
+        => aidView.twig
+        => aidAdd.twig
+        => reportList.twig
+        => reportGenerate.twig
 
-        => POST
-            => connection
-            => template
-                => dashboard.twig
-                => personList.twig
-                    => personView.twig
-    
-                => personAdd.twig
-                => aidView.twig
-                => aidAdd.twig
-                => reportList.twig
-                => reportAdd.twig
+    => POST
+        => connection
+        => template
+	    => dashboard.twig
+	    => personList.twig
+	        => personView.twig
 
-            => push
-                => personAdd
-                => personUpdate
-                => personDelete
-                => aidAdd
-                => aidUpdate
-                => aidRemove
-                => reportAdd
-                => reportRemove
+	    => personAdd.twig
+	    => aidView.twig
+	    => aidAdd.twig
+	    => reportList.twig
+	    => reportAdd.twig
+
+        => push
+	    => personAdd
+	    => personUpdate
+	    => personDelete
+	    => aidAdd
+	    => aidUpdate
+	    => aidRemove
+	    => reportAdd
+	    => reportRemove
 ```
 
 
