@@ -47,11 +47,13 @@ class PDO
      */
     public static function assign( string $dsn, string $user = "", string $pass = "" ): void
     {
+        // Try to establish a connection; set if successful
         try
         {
             static::$PDO = new \PDO($dsn, $user, $pass);
         } catch( \PDOException $e )
         {
+            // Failure to connect, halt execution
             die("Could not bind to the database!");
         }
     }
@@ -97,6 +99,7 @@ class PDO
         // Verify that call exists
         if ( !isset( $arr ) ) throw new \InvalidArgumentException();
 
+        // Push to end of callstack
         $this->callStack = array_merge($this->callStack, $arr);
         return $this;
     }

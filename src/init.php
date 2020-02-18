@@ -66,26 +66,31 @@ class Init
      */
     public function frontend(): void
     {
-        // Gather and validate view
+        // Set view
         $view = \SVC\System\Request::i()->view ?? "dashboard";
 
+        // Check that provided view exists
         if ( method_exists( new \SVC\System\Template(), $view ) )
         {
+            // Check that provided view is public
             $ref = new \ReflectionMethod( new \SVC\System\Template(), $view );
             if ( $ref->isPublic() )
             {
                 // Clear output buffer before displaying if not in debug
                 ! \SVC\Config::$debug ? ob_clean() : null;
 
+                // Set view to custom provided
                 $view = \SVC\System\Template::$view();
             }
         }
+
+        // Set review to provided if successful, fallback to dashboard if not
         $view = is_array( $view ) && $view[0] ? $view[1] : \SVC\System\Template::dashboard()[1];
 
+        // Output frontend template with included view
         die( static::$twig->load("body.twig")->render([
             'view'=> $view,
             'navbar' => [
-
                 [
                     'callback'=>'_title',
                     'title'=>"Main",
@@ -137,7 +142,7 @@ class Init
                 ],
                 [
                     'icon'=>'fa fa-plus',
-                    'callback'=>'reportGenerate',
+                    'callback'=>'reportAdd',
                     'public_name'=>"Generate Report",
                 ],
 
@@ -156,56 +161,78 @@ class Init
      */
     public function backend(): void
     {
+        // Check that incoming request is through Ajax
         if ( \SVC\System\Request::i()->isAjax() )
         {
+            // Check the request type against available options
             switch( \SVC\System\Request::i()->do )
             {
                 case 'connection':
                     die( (bool)\SVC\System\HTTP::internetConnection() );
                 case 'template':
+                    // Check that callback is provided
                     if ( !is_null( $callback = \SVC\System\Request::i()->callback ) )
                     {
+                        // Check that provided callback exists
                         if ( method_exists( new \SVC\System\Template(), $callback ) )
                         {
+                            // Check that provided callback is public
                             $ref = new \ReflectionMethod( new \SVC\System\Template(), $callback );
                             if ( $ref->isPublic() )
                             {
                                 // Clear output buffer before displaying if not in debug
                                 ! \SVC\Config::$debug ? ob_clean() : null;
+
+                                // Run callback function
                                 $callback = \SVC\System\Template::$callback();
                                 if ( $callback[0] )
                                 {
+                                    // Run template callback and output response
                                     die( $callback[1] );
                                 }
                             }
                         }
+                        // Invalid callback provided, return 405: Method Not Allowed
+                        \SVC\System\HTTP::error(405, "Method Not Allowed");
                     }
-                    \SVC\System\HTTP::error(405, "Method not allowed");
+                    // No callback provided, return 400: Bad Request
+                    \SVC\System\HTTP::error(400, "Bad Request");
                     break;
 
                 case 'push':
+                    // Check that callback is provided
                     if ( !is_null( $callback = \SVC\System\Request::i()->callback ) && !is_null( $data = \SVC\System\Request::i()->data ) )
                     {
+                        // Check that provided callback exists
                         if ( method_exists( new \SVC\System\Template(), $callback ) )
                         {
+                            // Check that provided callback is public
                             $ref = new \ReflectionMethod(new \SVC\System\Push(), $callback );
                             if ($ref->isPublic())
                             {
+                                // Clear output buffer before displaying if not in debug
+                                ! \SVC\Config::$debug ? ob_clean() : null;
+
+                                // Run push callback and output response
                                 die( \SVC\System\Push::i()->$callback( $data ) );
                             }
-                            \SVC\System\HTTP::error(405, "Method not allowed");
+                            // Invalid callback provided, return 405: Method Not Allowed
+                            \SVC\System\HTTP::error(405, "Method Not Allowed");
                         }
                     }
-                    \SVC\System\HTTP::error(400, "Invalid parameters");
+                    // No callback provided, return 400: Bad Request
+                    \SVC\System\HTTP::error(400, "Bad Request");
                     break;
 
                 default:
-                    \SVC\System\HTTP::error(400, "Invalid parameters");
+                    // No request type provided, return 400: Bad Request
+                    \SVC\System\HTTP::error(400, "Bad Request");
                     break;
             }
         }
         else
         {
+            // Nothing provided, return 400: Bad Request
             \SVC\System\HTTP::error(400, "Bad Request");
         }
     }

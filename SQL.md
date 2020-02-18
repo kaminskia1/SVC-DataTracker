@@ -1,4 +1,4 @@
-# SQLite Structures
+# SQLite Structure
 
 ### Table `Person`
 ```

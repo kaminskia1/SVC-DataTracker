@@ -1,6 +1,47 @@
 # SVC-People-Tracker
 
 ### Site Map
+```
+    /index.php
+        => GET
+            => dashboard.twig
+            => personList.twig
+                => personView.twig
+
+            => personAdd.twig
+            => aidView.twig
+            => aidAdd.twig
+            => reportList.twig
+            => reportGenerate.twig
+
+        => POST
+            => connection
+            => template
+                => dashboard.twig
+                => personList.twig
+                    => personView.twig
+    
+                => personAdd.twig
+                => aidView.twig
+                => aidAdd.twig
+                => reportList.twig
+                => reportAdd.twig
+
+            => push
+                => personAdd
+                => personUpdate
+                => personDelete
+                => aidAdd
+                => aidUpdate
+                => aidRemove
+                => reportAdd
+                => reportRemove
+```
+
+
+
+
+### Frontend Navigation Map
 ###### Public Name => Internal Callback
 ```
 Main
@@ -21,41 +62,3 @@ Report
 	Generate Report => reportGenerate
 ```
 
-
-
-
-## table `Person`
-
-id int
-date TIMESTAMP
-firstname string
-lastname string
-phone string
-address string
-assistancetype string // Convert to enumeration
-shutoff/evict bool
-	date if true
-	referredby if true
-familysize int
-	familydata text
-	children + age, adults, seniors
-employed bool
-	placeofenployment string
-extradata text
-
-
-
-
-
-## table `aid`
-
-foodbagcount int
-giftcardcount (15/26)
-vouchers
-	clothing
-	furniture
-	utilities
-account #
-rentcost
-landlordaddress
-extradata text

@@ -87,7 +87,7 @@ class Template
         return [true, ""];
     }
 
-    public static function reportGenerate(): array
+    public static function reportAdd(): array
     {
         return [true, ""];
     }

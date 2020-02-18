@@ -26,8 +26,14 @@ class HTTP
             default:
                 break;
         }
+
+        // Set response code
         http_response_code($http_code);
+
+        // Output message
         echo $message;
+
+        // Kill execution
         exit;
     }
 
