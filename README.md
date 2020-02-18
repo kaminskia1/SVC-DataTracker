@@ -3,6 +3,7 @@
 ### Requirements
 	- composer
 	- php (>7.1.3)
+	- phpdesktop (>57.0)
 	
 ### Site Map
 ```
