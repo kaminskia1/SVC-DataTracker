@@ -11,6 +11,11 @@ if ( !defined("ENABLE") || @ENABLE != true )
 class Push
 {
 
+    /**
+     * Push constructor
+     *
+     * @return static
+     */
     public static function i(): self
     {
 

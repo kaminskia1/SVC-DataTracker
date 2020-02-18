@@ -47,7 +47,7 @@ class PDO
      */
     public static function assign( string $dsn, string $user = "", string $pass = "" ): void
     {
-        // Try to establish a connection; set if successful
+        // Try to establish a connection; bind to static variable if successful
         try
         {
             static::$PDO = new \PDO($dsn, $user, $pass);
@@ -138,6 +138,7 @@ class PDO
 
         $stmt = "";
 
+        // Cycle through each element in the callstack
         foreach ( $this->callStack as $k => $v )
         {
             switch ( $k )
@@ -145,7 +146,7 @@ class PDO
                 case 'params':
                     switch ( $this->callStack['type'] )
                     {
-                        case 'INSERT INTO':
+                        case 'INSERT INTO': /* ->insert() */
                             $ik = [];
                             $iv = [];
 
@@ -165,8 +166,12 @@ class PDO
                                             {
                                                 array_push($ik, $jk);
                                             }
+
+                                            // Push row into column
                                             array_push($iv, $jv);
                                         }
+
+                                        // Push column into array
                                         array_push($iv, "(" . implode(",", $iv) . ") ");
                                     }
                                 }
@@ -180,32 +185,51 @@ class PDO
                                         {
                                             array_push($ik, $jk);
                                         }
+
+                                        // Push row into column
                                         array_push($iv, $jv);
                                     }
+
+                                    // Convert array into string and add parenthesis padding ( ['a','b','c'] => "(a,b,c)" )
                                     $iv = "(" . implode(",", $iv) . ") ";
                                 }
+
+                                // Bind data
                                 $ik = "(" . implode(",", $ik) . ") ";
+
+                                // Combine values and data into a single query
                                 $stmt .= $ik . " VALUES " . (is_array($iv) ? explode(",", $iv) : $iv) . " ";
 
                             }
                             else
                             {
+                                // Assume string if provided data is unrecognizable
                                 $stmt .= "$v ";
                             }
                             break;
-                        case 'SELECT':
-                            $stmt .= (is_array($v) ? implode(",", $v) : $v) . " FROM ";
+
+                        case 'SELECT': /* ->select() */
+
+                            // Explode array into column names, assume to string if not array
+                            $stmt .= ( is_array( $v ) ? implode( ",", $v) : $v ) . " FROM ";
                             break;
+
                         default:
                             $stmt .= "$v ";
                     }
                     break;
+
+                // Send to where compiler
                 case 'where':
                     $stmt .= $this->_compileWhereClause($v) . " ";
                     break;
 
+                // Append without padding on end
                 case 'custom':
                     $stmt .= $v;
+                    break;
+
+                // Append with padding on end
                 default:
                     $stmt .= "$v ";
             }
@@ -219,7 +243,7 @@ class PDO
      * @param $data
      * @return string
      */
-    protected function _compileWhereClause($data): string
+    protected function _compileWhereClause( $data ): string
     {
 
     }
@@ -233,6 +257,7 @@ class PDO
      */
     public function run( $query = null )
     {
+        // If select, convert result into a PDOSelect instance, if not then return default response
         return $this->callStack['type'] === "SELECT" ? new \SVC\System\PDOSelect( static::$PDO->prepare( $query ?: $this->_compileQuery() ) ) : static::$PDO->prepare( $query ?: $this->_compileQuery() );
     }
 

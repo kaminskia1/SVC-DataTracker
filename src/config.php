@@ -25,7 +25,7 @@ class Config
     public static $assetDirectory = "assets\\";
 
     /**
-     * Location of the database file
+     * Location and name of the database file (defaults to asset directory)
      *
      * @var string
      */

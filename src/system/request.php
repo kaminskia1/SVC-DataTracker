@@ -23,8 +23,6 @@ class Request
     /**
      * Set a cookie
      *
-     * @TODO Allow for multiple cookies to be set at once
-     *
      * @param string $name
      * @param string|int $val
      * @param $duration = 604800
@@ -54,6 +52,7 @@ class Request
      */
     public function isAjax(): bool
     {
+        // Check that request is POST and requestmethod is xmlhttprequest
         return ( $_SERVER['REQUEST_METHOD'] == "POST" && !empty( $_SERVER['HTTP_X_REQUESTED_WITH'] ) && ( strtolower( $_SERVER['HTTP_X_REQUESTED_WITH'] ) == 'xmlhttprequest' ) );
     }
 

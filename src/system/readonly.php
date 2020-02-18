@@ -12,6 +12,7 @@ trait ReadOnly
      */
     public function __get( $var )
     {
+        // Default to false if it doesn't exist
         return $this->$var ?? false;
     }
 }

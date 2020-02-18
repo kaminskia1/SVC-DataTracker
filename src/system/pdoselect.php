@@ -11,8 +11,15 @@ if ( !defined("ENABLE") || @ENABLE != true )
 class PDOSelect
 {
 
+    /**
+     * @var \PDOStatement PDO Select result
+     */
     private $PDOStatement;
 
+    /**
+     * PDOSelect constructor.
+     * @param \PDOStatement $p
+     */
     public function __construct( \PDOStatement $p )
     {
         $this->PDOStatement = $p;

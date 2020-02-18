@@ -14,6 +14,11 @@ class Template
      * Security is tight here, as any listed public, static, function can be called by the requester.
      */
 
+    /**
+     * Dashboard Template
+     *
+     * @return array
+     */
     public static function dashboard(): array
     {
         return [true, \SVC\Init::$twig->load("dashboard.twig")->render([
@@ -46,6 +51,11 @@ class Template
         ])];
     }
 
+    /**
+     * Person List Template
+     *
+     * @return array
+     */
     public static function personList(): array
     {
         $query = \SVC\System\PDO::i()
@@ -57,36 +67,71 @@ class Template
         return [true, ""];
     }
 
+    /**
+     * Person Add Template
+     *
+     * @return array
+     */
     public static function personAdd(): array
     {
         return [true, ""];
     }
 
+    /**
+     * Person View Template
+     *
+     * @return array
+     */
     public static function personView(): array
     {
         return [true, ""];
     }
 
+    /**
+     * Aid List Template
+     *
+     * @return array
+     */
     public static function aidList(): array
     {
         return [true, ""];
     }
 
+    /**
+     * Aid Add Template
+     *
+     * @return array
+     */
     public static function aidAdd(): array
     {
         return [true, ""];
     }
 
+    /**
+     * Aid View Template
+     *
+     * @return array
+     */
     public static function aidView(): array
     {
         return [true, ""];
     }
 
+    /**
+     * Report List Template
+     *
+     * @return array
+     */
     public static function reportList(): array
     {
         return [true, ""];
     }
 
+    /**
+     * Report Add Template
+     *
+     * @return array
+     */
     public static function reportAdd(): array
     {
         return [true, ""];
