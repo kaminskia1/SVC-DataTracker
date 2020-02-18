@@ -257,9 +257,35 @@ class PDO
      */
     public function run( $query = null )
     {
-        // If select, convert result into a PDOSelect instance, if not then return default response
-        return $this->callStack['type'] === "SELECT" ? new \SVC\System\PDOSelect( static::$PDO->prepare( $query ?: $this->_compileQuery() ) ) : static::$PDO->prepare( $query ?: $this->_compileQuery() );
+        if ( $this->callStack['type'] === "SELECT" )
+        {
+            // Return an instance of \SVC\System\PDOSelect if query type is select
+            return new \SVC\System\PDOSelect( static::$PDO->prepare( $query ?: $this->_compileQuery() ) );
+        }
+        else
+        {
+            // Prepare the statement
+            $a = static::$PDO->prepare( $query ?: $this->_compileQuery() );
+
+            // Execute the statement
+            $a->execute();
+
+            // Commit the change
+            static::$PDO->commit();
+
+            // Return the query response
+            return $a;
+        }
     }
 
+    /**
+     * Commit the change
+     *
+     * @return bool
+     */
+    public function commit(): bool
+    {
+        return static::$PDO->commit();
+    }
 
 }

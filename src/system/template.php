@@ -63,7 +63,11 @@ class Template
             ->params("*")
             ->table("person")
             ->run();
-        var_dump($query);
+        var_dump($query->fetch());
+        $query->next();
+        var_dump($query->fetch());
+
+
         return [true, ""];
     }
 
