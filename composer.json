@@ -1,5 +1,5 @@
 {
-  "name": "ak/svctracker",
+  "name": "kaminskia1/svctracker",
   "description": "St. Veronica Conference People Tracker",
   "type": "project",
   "require": {
@@ -12,8 +12,8 @@
   "license": "MIT",
   "authors": [
     {
-      "name": "Seven777",
-      "email": "a@tbd.com"
+      "name": "kaminskia1",
+      "email": "sm1124@protonmail.com"
     }
   ]
 }
