@@ -1,0 +1,18 @@
+<table>
+    <thead>
+        <tr>
+            {% for x,y in data[0] %}
+                <td>{{ x }}</td>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for x in data %}
+            <tr>
+                {% for y in x %}
+                    <td>{{ y }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

@@ -73,17 +73,18 @@ $(document).ready(()=>
             },
             success: (b)=>
             {
-                // Set viewport to response
+                // Set viewport to response and bind view to url
                 $("body>div.viewport").fadeTo(300, 0, ()=>
                 {
                     setTimeout(()=>
                     {
                         $("body>div.viewport").html(b).fadeTo(300, 1);
-                        $("body>div >div>div>div>div.head>i").click((a) => {
-                            window.redirect(a.currentTarget.id)
+                        $("body>div >div>div>div>div.head>i").click((c) => {
+                            window.redirect(c.currentTarget.id);
                         });
                     }, 400);
                 });
+                window.appendToUrl('view', a);
 
                 // Close navigation
                 if ( $("nav").hasClass("active") )

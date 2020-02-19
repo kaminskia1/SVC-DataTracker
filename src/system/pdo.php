@@ -23,7 +23,7 @@ class PDO
     /**
      * @var array Query call stack
      */
-    private $callStack = [];
+    public $callStack = [];
 
     /**
      * @var array Available type calls

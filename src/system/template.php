@@ -71,17 +71,16 @@ class Template
      */
     public static function personList(): array
     {
-        $query = \SVC\System\PDO::i()
-            ->select()
-            ->params("*")
-            ->table("person")
-            ->run();
-        var_dump($query->fetch());
-        $query->next();
-        var_dump($query->fetch());
+        $table = \SVC\System\Table::createDB
+        (
+            [
+                'id' => 'personList',
+                'table' => 'person'
+            ]
+        );
 
 
-        return [true, ""];
+        return [ true, (string) $table ];
     }
 
     /**
