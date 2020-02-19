@@ -2,6 +2,8 @@
 
 namespace SVC\System;
 
+use Twig\Environment;
+
 if ( !defined("ENABLE") || @ENABLE != true )
 {
     header("HTTP/1.1 401 Unauthorized");
@@ -22,25 +24,30 @@ class Table
     private $options = [];
 
     /**
-     * @var array Default Table options
+     * @var array Default table options
      */
     private $defaultArrayOptions = [
         'id'      => "\SVC\System\Table",
-        'pageTag' => "page",
         'page'    => 0,
+            'pageTag' => "page",
         'include' => "*",
         'limit'   => 25,
     ];
 
+    /**
+     * @var array Default database table options
+     */
     private $defaultDBOptions = [
-        'id'      => "\SVC\System\Table",
-        'pageTag' => "page",
-        'page'    => 0,
+        'id'      => "\SVC\System\Table\DB",
         'include' => "*",
         'table'   => "",
-        'order'   => "ASC",
+        'where'   => "",
+        'page'    => 0,
+        'pageTag' => "page",
+        'order'   => "id",
+            'sort' => "ASC",
         'limit'   => 25,
-    ]
+    ];
 
     /**
      * Create a table from a 2D array
@@ -49,29 +56,7 @@ class Table
      * @param array $options
      * @return static
      */
-    public static function create( array $options ): self
-    {
-        // Create a fresh instance to emulate $this
-        $table = new self();
-
-        // Bind data
-        $table->data = \SVC\System\PDO::i()->select();
-
-        // Merge user provided options onto default ones
-        $table->options = array_merge($table->defaultOptions, $options);
-
-        // Return instance
-        return $table;
-    }
-
-    /**
-     * Create a table to model a database table
-     *
-     * @param PDO $data
-     * @param array $options
-     * @return Table
-     */
-    public static function createDB( \SVC\System\PDO $data, $options = [] ): self
+    public static function create( array $data, array $options ): self
     {
         // Create a fresh instance to emulate $this
         $table = new self();
@@ -80,7 +65,27 @@ class Table
         $table->data = $data;
 
         // Merge user provided options onto default ones
-        $table->options = array_merge($table->defaultOptions, $options);
+        $table->options = array_merge($table->defaultArrayOptions, $options);
+
+        // Return instance
+        return $table;
+    }
+
+    /**
+     * Create a table to model a database table
+     *
+     * @param array $options
+     * @return Table
+     */
+    public static function createDB($options = [] ): self
+    {
+        // Create a fresh instance to emulate $this
+        $table = new self();
+
+        // Bind data
+        $table->data = \SVC\System\PDO::i()->select();
+        // Merge user provided options onto default ones
+        $table->options = array_merge($table->defaultDBOptions, $options);
 
         // Return instance
         return $table;
@@ -114,10 +119,6 @@ class Table
         {
             switch ( $option )
             {
-                case 'id':
-                    break;
-                case 'order':
-                    break;
                 case 'include':
                     if ( $this->data instanceof \SVC\System\PDO )
                     {
@@ -145,15 +146,42 @@ class Table
                         }
                     }
                     break;
-                case 'page':
 
+                case 'page':
+                    $key = $this->options['pageTag'];
+                    $page = (int)\SVC\System\Request::i()->$key ?: 0;
+                    if ( $this->data instanceof \SVC\System\PDO )
+                    {
+                        // Set order param, use LIMIT to emulate pagination
+                        $this->data->order( $this->options['order'] . " " .  $this->options['sort'] . " LIMIT " . $page * $this->options['limit'] . ", " . ($page+1) * $this->options['limit'] );
+                    }
+                    else
+                    {
+                        foreach( $this->data as $k => $v )
+                        {
+                            // Unset rows that do not fall within the page's range
+                            if ( $key < $page * $this->options['limit'] || $key >= $page+1 * $this->options['limit'] ) unset( $this->data[$k] );
+                        }
+                    }
                     break;
+
+                case 'where':
+                    // Only applicable to TableDB, no if-else needed
+                    $this->data->order( $this->options['where'] );
+                    break;
+                case 'table':
+                    // Only applicable to TableDB, no if-else needed
+                    $this->data->table( $this->options['table'] );
             }
         }
+        if ( $this->data instanceof \SVC\System\PDO )
+        {
+            $this->data = $this->data->run();
+        }
+        var_dump($this->data);
+        die();
 
-
-
-        return \SVC\Init::$twig->prepare("table.twig")->render([$this->data]);
+        return \SVC\Init::$twig->load("table.twig")->render([ 'data' => $this->data, 'options' => $this->options ]);
     }
 
 }

@@ -240,12 +240,14 @@ class PDO
     /**
      * Compile a where clause based off provided information
      *
+     * @TODO Finish this
+     *
      * @param $data
      * @return string
      */
     protected function _compileWhereClause( $data ): string
     {
-
+        return $data;
     }
 
 
