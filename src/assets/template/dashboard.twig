@@ -1,15 +1,21 @@
 <link href="assets/css/dashboard.css" type="text/css" rel="stylesheet" />
-<h3>Welcome</h3>
 
-<div class="card-holder">
+<div class="dashboard">
+    <h3>Welcome, {{ user }}</h3>
 
-    {% for card in cards %}
-        <div class="card">
-            <div class="icon">
-                <i class="{{ card.icon }}"></i>
+    <div class="card-holder">
+
+        {% for card in cards %}
+            <div class="card">
+                <div class="head">
+                    <i class="{{ card.icon }}" id="{{ card.callback }}"></i>
+                    <div class="name">{{ card.name }}</div>
+                </div>
+                <div class="content">
+                    {{ card.content }}
+                </div>
             </div>
-            <div class="name">{{ card.name }}</div>
-        </div>
-    {% endfor %}
+        {% endfor %}
 
+    </div>
 </div>

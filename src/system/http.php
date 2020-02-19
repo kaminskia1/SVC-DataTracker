@@ -10,7 +10,13 @@ if ( !defined("ENABLE") || @ENABLE != true )
 
 class HTTP
 {
-    static public function error(int $http_code, string $message = "" ): void
+    /**
+     * Throw a HTTP error
+     *
+     * @param int $http_code
+     * @param string $message
+     */
+    static public function error( int $http_code, string $message = "" ): void
     {
         // Search for the provided HTTP Error code
         switch ( $http_code ) {
@@ -28,13 +34,10 @@ class HTTP
         }
 
         // Set response code
-        http_response_code($http_code);
+        http_response_code( $http_code );
 
-        // Output message
-        echo $message;
-
-        // Kill execution
-        exit;
+        // Output message and kill execution
+        die( $message );
     }
 
     /**
@@ -45,10 +48,7 @@ class HTTP
     static public function internetConnection(): bool
     {
         // Generate a temporary socket to check connection
-        if ( @fsockopen('www.google.com', 80, $num, $error, 2) != false )
-        {
-            return true;
-        }
-        return false;
+        return @fsockopen('www.google.com', 80, $num, $error, 2) != false ? true : false;
     }
+
 }

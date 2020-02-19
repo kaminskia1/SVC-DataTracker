@@ -50,9 +50,18 @@ $(document).ready(()=>
         }
     });
 
+    // Dashboard card redirects
+    $("body>div >div>div>div>div.head>i").click((a) => {
+        window.redirect(a.currentTarget.id)
+    });
 
     // Navigation Bar Requests
     $("nav>ul>li").click((a)=>
+    {
+        window.redirect(a.currentTarget.id);
+    });
+
+    window.redirect = function(a)
     {
         // Initiate POST request
         $.post({
@@ -60,12 +69,21 @@ $(document).ready(()=>
             cache: false,
             data: {
                 do: "template",
-                callback: a.currentTarget.id,
+                callback: a,
             },
-            success: (a)=>
+            success: (b)=>
             {
                 // Set viewport to response
-                $("body>div.viewport").html(a);
+                $("body>div.viewport").fadeTo(300, 0, ()=>
+                {
+                    setTimeout(()=>
+                    {
+                        $("body>div.viewport").html(b).fadeTo(300, 1);
+                        $("body>div >div>div>div>div.head>i").click((a) => {
+                            window.redirect(a.currentTarget.id)
+                        });
+                    }, 400);
+                });
 
                 // Close navigation
                 if ( $("nav").hasClass("active") )
@@ -74,7 +92,7 @@ $(document).ready(()=>
                 }
             }
         });
-    });
+    }
 
     // Appends a (key => value) to the url without reloading. Used for tracking subpages
     window.appendToUrl =  function(k, v)

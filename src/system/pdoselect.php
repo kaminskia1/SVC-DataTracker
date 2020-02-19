@@ -12,6 +12,10 @@ class PDOSelect
 {
 
     /**
+     * @internal This implementation is built to manage small(er) chunks of data, a proper interface would implement proper cursoring in \PDOStatement
+     */
+
+    /**
      * @var \PDOStatement PDO Select object
      */
     public $PDOStatement;

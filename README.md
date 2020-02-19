@@ -17,7 +17,7 @@
         => aidView.twig
         => aidAdd.twig
         => reportList.twig
-        => reportGenerate.twig
+        => reportAdd.twig
 
     => POST
         => connection

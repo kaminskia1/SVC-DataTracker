@@ -35,6 +35,8 @@ class Init
     /**
      * Create a temporary instance from a static deceleration and run required prerequisites
      *
+     * @todo Migrate template css <link>s from custom templates to body.twig
+     *
      * @return self
      */
     public static function i(): self

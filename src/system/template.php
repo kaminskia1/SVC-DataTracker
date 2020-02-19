@@ -22,30 +22,43 @@ class Template
     public static function dashboard(): array
     {
         return [true, \SVC\Init::$twig->load("dashboard.twig")->render([
+            'user' => 'User',
             'cards' => [
                 [
                     'icon' => 'fa fa-users',
-                    'name' => "View People"
+                    'name' => "View People",
+                    'content' => 'Default Content',
+                    'callback' => 'personList'
                 ],
                 [
                     'icon' => 'fa fa-plus',
-                    'name' => "Add Person"
+                    'name' => "Add Person",
+                    'content' => 'Default Content',
+                    'callback' => 'personAdd'
                 ],
                 [
                     'icon' => 'fa fa-money',
-                    'name' => "View Aid"
+                    'name' => "View Aid",
+                    'content' => 'Default Content',
+                    'callback' => 'aidList'
                 ],
                 [
                     'icon' => 'fa fa-plus',
-                    'name' => "Add Aid"
+                    'name' => "Add Aid",
+                    'content' => 'Default Content',
+                    'callback' => 'aidAdd'
                 ],
                 [
                     'icon' => 'fa fa-file',
-                    'name' => "View Reports"
+                    'name' => "View Reports",
+                    'content' => 'Default Content',
+                    'callback' => 'reportList'
                 ],
                 [
                     'icon' => 'fa fa-plus',
-                    'name' => "Add Reports"
+                    'name' => "Add Reports",
+                    'content' => 'Default Content',
+                    'callback' => 'reportAdd'
                 ],
             ]
         ])];
