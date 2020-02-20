@@ -1,6 +1,6 @@
 {
   "name": "kaminskia1/svctracker",
-  "description": "St. Veronica Conference People Tracker",
+  "description": "SVC People Tracker",
   "type": "project",
   "require": {
     "twig/twig": "^3.0",
