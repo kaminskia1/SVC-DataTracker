@@ -75,7 +75,9 @@ class Template
         (
             [
                 'id' => 'personList',
-                'table' => 'person'
+                'table' => 'person',
+                'include' => ['id','date','name_first','name_last'],
+                'lang' => ['id'=>'UID'],
             ]
         );
 

@@ -32,6 +32,7 @@ class Table
             'pageTag' => "page",
         'include' => "*",
         'limit'   => 25,
+        'lang' => [],
     ];
 
     /**
@@ -47,6 +48,7 @@ class Table
         'order'   => "id",
             'sort' => "ASC",
         'limit'   => 25,
+        'lang' => [],
     ];
 
     /**
@@ -169,6 +171,7 @@ class Table
                     // Only applicable to TableDB, no if-else needed
                     $this->data->order( $this->options['where'] );
                     break;
+
                 case 'table':
                     // Only applicable to TableDB, no if-else needed
                     $this->data->table( $this->options['table'] );
@@ -176,10 +179,20 @@ class Table
         }
         if ( $this->data instanceof \SVC\System\PDO )
         {
-            $this->data = $this->data->run();
+            $this->data = $this->data->run()->fetchAll();
         }
-        var_dump($this->data);
-        die();
+
+        // Table title lang
+        if ( count( $this->options['lang']) > 0)
+        {
+            $enc = json_encode($this->data[0]);
+            foreach ( $this->options['lang'] as $old => $new )
+            {
+                $enc = str_replace('"'.htmlspecialchars($old).'":', '"'.htmlspecialchars($new).'":', $enc );
+            }
+            $this->data[0] = (array)json_decode($enc);
+            var_dump($this->data);
+        }
 
         return \SVC\Init::$twig->load("table.twig")->render([ 'data' => $this->data, 'options' => $this->options ]);
     }
