@@ -251,6 +251,11 @@ class PDO
     }
 
 
+    public function getQuery(): string
+    {
+        return $this->_compileQuery();
+    }
+
     /**
      * Run the query
      *

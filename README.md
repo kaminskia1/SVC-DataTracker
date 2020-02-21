@@ -5,6 +5,7 @@
 	- PHP (>=7.1.3)
 	- PHPDesktop (>=57.0)
 	- jQuery (>=3.4.1) [Pre-packaged in /src/assets/js for offline usage]
+	- fontawesome (>=4.7.0) [Pre-packaged in /src/assets/css for offline usage]
 	
 ### Site Map
 ```

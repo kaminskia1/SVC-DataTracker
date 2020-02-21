@@ -141,4 +141,41 @@ $(document).ready(()=>
             window.history.replaceState({}, document.title, u[0] + '?' + q);
         }
     }
+
+    // Table buttons
+    $("body > div > div > div > div.button").click((a)=>{
+        window.tablePagination(a);
+        console.log("Event binded");
+    });
+
+    window.tablePagination = (a)=> {
+        if (a.currentTarget.classList[1] !== "disabled")
+        {
+            console.log("Page: " + a.currentTarget.classList[1]);
+            $.post({
+                url: document.location.href,
+                cache: false,
+                data: {
+                    do: "template",
+                    callback: a.currentTarget.parentElement.parentElement.classList[1],
+                    page: a.currentTarget.classList[1]
+                },
+                success: (b) => {
+                    // Set viewport to response and bind view to url
+                    $("body>div.viewport").fadeTo(100, 0, () => {
+                        setTimeout(() => {
+                            $("body>div.viewport").html(b).fadeTo(100, 1);
+                            $("body>div >div>div>div>div.head>i").click((c) => {
+                                window.redirect(c.currentTarget.id);
+                            });
+                            $("body > div > div > div > div.button").click((d)=>{
+                                window.tablePagination(d);
+                                console.log("Event binded");
+                            });
+                        }, 200);
+                    });
+                }
+            });
+        }
+    }
 });

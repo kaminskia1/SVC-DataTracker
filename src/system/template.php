@@ -76,8 +76,21 @@ class Template
             [
                 'id' => 'personList',
                 'table' => 'person',
-                'include' => ['id','date','name_first','name_last'],
-                'lang' => ['id'=>'UID'],
+                'include' => [
+                    'id',
+                    'date',
+                    'name_first',
+                    'name_last'
+                ],
+                'lang' => [
+                    'id'=>'UID',
+                    'date'=>'Date',
+                    'name_first'=>'First Name',
+                    'name_last'=>'Last Name'
+                ],
+                'limit' => 1,
+                'cta' => true,
+                'cta_link' => "index.php?view=personView&id=",
             ]
         );
 

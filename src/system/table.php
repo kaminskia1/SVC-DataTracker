@@ -33,6 +33,9 @@ class Table
         'include' => "*",
         'limit'   => 25,
         'lang' => [],
+        'cta' => false,
+        'cta_icon' => 'fa fa-arrow-right',
+        'cta_link' => '',
     ];
 
     /**
@@ -49,6 +52,9 @@ class Table
             'sort' => "ASC",
         'limit'   => 25,
         'lang' => [],
+        'cta' => false,
+            'cta_icon' => 'fa fa-arrow-right',
+            'cta_link' => '',
     ];
 
     /**
@@ -155,7 +161,13 @@ class Table
                     if ( $this->data instanceof \SVC\System\PDO )
                     {
                         // Set order param, use LIMIT to emulate pagination
-                        $this->data->order( $this->options['order'] . " " .  $this->options['sort'] . " LIMIT " . $page * $this->options['limit'] . ", " . ($page+1) * $this->options['limit'] );
+                        $this->data->order( $this->options['order'] . " " .  $this->options['sort'] . " LIMIT " . $this->options['limit'] . " OFFSET " . $page * $this->options['limit'] );
+                       $pageMax = \ceil( \SVC\System\PDO::i()
+                           ->select()
+                           ->params("COUNT(*)")
+                           ->table( $this->options['table'] )
+                           ->run()
+                           ->fetch()['COUNT(*)'] / $this->options['limit'] );
                     }
                     else
                     {
@@ -185,16 +197,31 @@ class Table
         // Table title lang
         if ( count( $this->options['lang']) > 0)
         {
-            $enc = json_encode($this->data[0]);
+            $enc = json_encode(@$this->data[0]);
             foreach ( $this->options['lang'] as $old => $new )
             {
                 $enc = str_replace('"'.htmlspecialchars($old).'":', '"'.htmlspecialchars($new).'":', $enc );
             }
             $this->data[0] = (array)json_decode($enc);
-            var_dump($this->data);
         }
 
-        return \SVC\Init::$twig->load("table.twig")->render([ 'data' => $this->data, 'options' => $this->options ]);
+        // Call to action
+        if ( $this->options['cta'] === true )
+        {
+            for ( $i=0; $i< count( $this->data ); $i++ )
+            {
+                $this->data[$i]['_cta'] = [ 'icon' => $this->options['cta_icon'], 'link' => $this->options['cta_link'] . $this->data[0][ array_keys($this->data[0])[0] ] ];
+            }
+        }
+
+        return \SVC\Init::$twig->load("table.twig")->render([
+            'data' => $this->data,
+            'options' => $this->options,
+            'page' => [
+                'current' => $page ?: 0,
+                'max' => @$pageMax -1 ?: 1,
+            ]
+        ]);
     }
 
 }
