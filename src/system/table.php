@@ -108,6 +108,7 @@ class Table
      */
     public function __call($name, $arguments): self
     {
+        // Check if in array
         if ( in_array( $this->options, $name ) )
         {
             $this->options[$name] = $arguments;
@@ -214,7 +215,7 @@ class Table
             }
         }
 
-        return \SVC\Init::$twig->load("table.twig")->render([
+        return \SVC\Init::$twig->load( \SVC\System\Request::i()->isAjax() ? "tableAjax.twig" : "table.twig" )->render([
             'data' => $this->data,
             'options' => $this->options,
             'page' => [

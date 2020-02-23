@@ -1,0 +1,91 @@
+
+<div class="button-container">
+    <div class="button-float">
+
+        {%  if page.current - 1 > 0 %}
+            <div class="button 0"><i class="fa fa-angle-double-left"></i></div>
+        {% else %}
+            <div class="button disabled hidden"><i class="fa fa-angle-double-left"></i></div>
+        {%  endif %}
+
+        {% if page.current > 0 %}
+            <div class="button {{ page.current - 1 }}"><i class="fa fa-angle-left"></i></div>
+        {% else %}
+            <div class="button disabled hidden"><i class="fa fa-angle-left"></i></div>
+        {% endif %}
+
+        <div class="button disabled">{{ page.current + 1 }}</div>
+
+        {%  if page.current < page.max  %}
+            <div class="button {{ page.current + 1}}"><i class="fa fa-angle-right"></i></div>
+        {% else %}
+            <div class="button disabled hidden"><i class="fa fa-angle-right"></i></div>
+        {% endif %}
+
+        {% if page.current + 1 < page.max %}
+            <div class="button {{ page.max }}"><i class="fa fa-angle-double-right"></i></div>
+        {% else %}
+            <div class="button disabled hidden"><i class="fa fa-angle-double-right"></i></div>
+        {% endif %}
+
+    </div>
+</div>
+
+<table id="{{ options.id }}">
+    <thead>
+    <tr>
+        {% for x,y in data[0] %}
+            {% if x == "_cta" %}
+                <td>CTA</td>
+            {% else %}
+                <td>{{ x }}</td>
+            {% endif %}
+        {% endfor %}
+    </tr>
+    </thead>
+    <tbody>
+    {% for x in data %}
+        <tr>
+            {% for x,y in x %}
+                {% if x == "_cta" %}
+                    <td class="call-to-action"><a class="cta" href="{{ y.link }}"><i class="{{ y.icon }}"></i></a></td>
+                {% else %}
+                    <td>{{ y }}</td>
+                {% endif %}
+            {% endfor %}
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<div class="button-container">
+    <div class="button-float">
+
+        {%  if page.current - 1 > 0 %}
+            <div class="button 0"><i class="fa fa-angle-double-left"></i></div>
+        {% else %}
+            <div class="button disabled hidden"><i class="fa fa-angle-double-left"></i></div>
+        {%  endif %}
+
+        {% if page.current > 0 %}
+            <div class="button {{ page.current - 1 }}"><i class="fa fa-angle-left"></i></div>
+        {% else %}
+            <div class="button disabled hidden"><i class="fa fa-angle-left"></i></div>
+        {% endif %}
+
+        <div class="button disabled">{{ page.current + 1 }}</div>
+
+        {%  if page.current < page.max  %}
+            <div class="button {{ page.current + 1}}"><i class="fa fa-angle-right"></i></div>
+        {% else %}
+            <div class="button disabled hidden"><i class="fa fa-angle-right"></i></div>
+        {% endif %}
+
+        {% if page.current + 1 < page.max %}
+            <div class="button {{ page.max }}"><i class="fa fa-angle-double-right"></i></div>
+        {% else %}
+            <div class="button disabled hidden"><i class="fa fa-angle-double-right"></i></div>
+        {% endif %}
+
+    </div>
+</div>

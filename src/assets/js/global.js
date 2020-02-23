@@ -143,7 +143,7 @@ $(document).ready(()=>
     }
 
     // Table buttons
-    $("body > div > div > div > div.button").click((a)=>{
+    $("body > div > div > div > div > div.button").click((a)=>{
         window.tablePagination(a);
         console.log("Event binded");
     });
@@ -157,22 +157,24 @@ $(document).ready(()=>
                 cache: false,
                 data: {
                     do: "template",
-                    callback: a.currentTarget.parentElement.parentElement.classList[1],
+                    callback: a.currentTarget.parentElement.parentElement.parentElement.classList[1],
                     page: a.currentTarget.classList[1]
                 },
                 success: (b) => {
                     // Set viewport to response and bind view to url
-                    $("body>div.viewport").fadeTo(100, 0, () => {
+                    $(a.currentTarget.parentElement.parentElement.parentElement.children[1].children[1]).fadeTo(100, 0, () => {
                         setTimeout(() => {
-                            $("body>div.viewport").html(b).fadeTo(100, 1);
+                            $(a.currentTarget.parentElement.parentElement.parentElement).html(b);
+                            window.test = a.currentTarget.parentElement.parentElement.parentElement;
+                            //$(a.currentTarget.parentElement.parentElement.parentElement.children[1]).fadeTo(100, 1);
                             $("body>div >div>div>div>div.head>i").click((c) => {
                                 window.redirect(c.currentTarget.id);
                             });
-                            $("body > div > div > div > div.button").click((d)=>{
+                            $("body > div > div > div > div > div.button").click((d)=>{
                                 window.tablePagination(d);
                                 console.log("Event binded");
                             });
-                        }, 200);
+                        }, 100);
                     });
                 }
             });
