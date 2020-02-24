@@ -93,3 +93,8 @@ div.button-container div.button.hidden {
     opacity: 0;
     cursor: default;
 }
+
+div.table-container div.table-error {
+    margin-left: 24px;
+    margin-top: 10px;
+}

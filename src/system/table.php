@@ -194,53 +194,72 @@ class Table
                     $this->data->table( $this->options['table'] );
             }
         }
-        if ( $this->data instanceof \SVC\System\PDO )
-        {
-            $this->data = $this->data->run()->fetchAll();
+
+        // Attempt to query $data
+        if ($this->data instanceof \SVC\System\PDO) {
+            try
+            {
+                $this->data = $this->data->run()->fetchAll();
+            } catch (\TypeError $e)
+            {
+                // Output error table if failure to query
+                return \SVC\Init::$twig->load( "tableError.twig" )->render([
+                    'options' => $this->options,
+                    'error' => 'Internal Error: ' . $e->getMessage()
+                ]);
+            }
         }
 
-        // Data postprocessing
-        if ( count( $this->options['process'] ) > 0 )
+        if ( count( $this->data ) > 0 )
         {
-            for ( $i=0; $i< count( $this->data ); $i++ )
+            // Data postprocessing
+            if ( count( $this->options['process'] ) > 0 )
             {
-                foreach ( $this->data[$i] as $k => $v)
+                for ( $i=0; $i< count( $this->data ); $i++ )
                 {
-                    if ( array_key_exists($k, $this->options['process'] ) )
+                    foreach ( $this->data[$i] as $k => $v)
                     {
-                        $this->data[$i][$k] = $this->options['process'][$k]($v);
+                        if ( array_key_exists($k, $this->options['process'] ) )
+                        {
+                            $this->data[$i][$k] = $this->options['process'][$k]($v);
+                        }
                     }
                 }
             }
-        }
 
-        // Table title lang
-        if ( count( $this->options['lang']) > 0)
-        {
-            $enc = json_encode(@$this->data[0]);
-            foreach ( $this->options['lang'] as $old => $new )
+            // Table title lang
+            if ( count( $this->options['lang']) > 0)
             {
-                $enc = str_replace('"'.htmlspecialchars($old).'":', '"'.htmlspecialchars($new).'":', $enc );
+                $enc = json_encode(@$this->data[0]);
+                foreach ( $this->options['lang'] as $old => $new )
+                {
+                    $enc = str_replace('"'.htmlspecialchars($old).'":', '"'.htmlspecialchars($new).'":', $enc );
+                }
+                $this->data[0] = (array)json_decode($enc);
             }
-            $this->data[0] = (array)json_decode($enc);
-        }
 
-        // Call to action
-        if ( $this->options['cta'] === true )
-        {
-            for ( $i=0; $i< count( $this->data ); $i++ )
+            // Call to action
+            if ( $this->options['cta'] === true )
             {
-                $this->data[$i]['_cta'] = [ 'icon' => $this->options['cta_icon'], 'link' => $this->options['cta_link'] . $this->data[0][ array_keys( $this->data[0] )[0] ] ];
+                for ( $i=0; $i< count( $this->data ); $i++ )
+                {
+                    $this->data[$i]['_cta'] = [ 'icon' => $this->options['cta_icon'], 'link' => $this->options['cta_link'] . $this->data[0][ array_keys( $this->data[0] )[0] ] ];
+                }
             }
+
+            return \SVC\Init::$twig->load( \SVC\System\Request::i()->isAjax() && \SVC\System\Request::i()->pageAjax ? "tableAjax.twig" : "table.twig" )->render([
+                'data' => $this->data,
+                'options' => $this->options,
+                'page' => [
+                    'current' => $page ?: 0,
+                    'max' => @$pageMax - 1 ?: 0,
+                ]
+            ]);
         }
 
-        return \SVC\Init::$twig->load( \SVC\System\Request::i()->isAjax() && \SVC\System\Request::i()->pageAjax ? "tableAjax.twig" : "table.twig" )->render([
-            'data' => $this->data,
+        return \SVC\Init::$twig->load( "tableError.twig" )->render([
             'options' => $this->options,
-            'page' => [
-                'current' => $page ?: 0,
-                'max' => @$pageMax - 1 ?: 0,
-            ]
+            'error' => 'No data to show!'
         ]);
     }
 

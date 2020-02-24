@@ -1,7 +1,7 @@
 # SVC-People-Tracker
 
 ### Requirements
-	- Composer
+	- Composer (>= 1.9.3)
 	- PHP (>=7.1.3)
 	- PHPDesktop (>=57.0)
 	- jQuery (>=3.4.1) [Pre-packaged in /src/assets/js for offline usage]

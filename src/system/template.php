@@ -74,22 +74,22 @@ class Template
         $table = \SVC\System\Table::createDB
         (
             [
-                'id' => "personList",
-                'title' => "View People",
-                'table' => "person",
+                'id'      => "personList",
+                'title'   => "View People",
+                'table'   => "person",
                 'include' => [
                     'id',
                     'name_first',
                     'name_last',
                     'phone',
-                    'date'
+                    'last_edited'
                 ],
                 'lang' => [
-                    'id'         => 'User ID',
-                    'name_first' => 'First Name',
-                    'name_last'  => 'Last Name',
-                    'phone'      => 'Phone Number',
-                    'date'       => 'Date Added',
+                    'id'          => 'User ID',
+                    'name_first'  => 'First Name',
+                    'name_last'   => 'Last Name',
+                    'phone'       => 'Phone Number',
+                    'last_edited' => 'Last Modified',
                 ],
                 'limit'    => 25,
                 'cta'      => true,
@@ -163,22 +163,26 @@ class Template
         $table = \SVC\System\Table::createDB
         (
             [
-                'id' => 'aidList',
-                'title' => "View Aid",
-                'table' => 'aid',
+                'id'      => 'aidList',
+                'title'   => "View Aid",
+                'table'   => 'aid',
                 'include' => [
                     'id',
+                    'person_id',
                     'given',
                     'account',
+                    'last_edited'
                 ],
                 'lang' => [
-                    'id'      =>'Entry ID',
-                    'given'   =>'Amount Given',
-                    'account' =>'Account',
+                    'id'          =>'Entry ID',
+                    'person_id'   => "Issued to",
+                    'given'       =>'Amount Issued',
+                    'account'     =>'Account',
+                    'last_edited' => 'Last Modified'
                 ],
                 'limit'    => 25,
                 'cta'      => true,
-                'cta_link' => "index.php?view=personView&id=",
+                'cta_link' => "index.php?view=aidView&id=",
                 'process'  => [
                     'given' => function( $v )
                     {
