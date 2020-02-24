@@ -1,6 +1,6 @@
 <?php
 
-namespace SVC\System;
+namespace SVC\Traits;
 
 trait ReadOnly
 {
