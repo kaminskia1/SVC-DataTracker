@@ -13,5 +13,6 @@
 - Add a user guide
 - Finalize internal documentation
 - Add PHPUnit tests
+- Add PHPUnit tests to github workflow
 - Add installation batch file
 - Issue 1.0-alpha Release and begin testing!
