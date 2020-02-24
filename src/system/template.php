@@ -74,23 +74,58 @@ class Template
         $table = \SVC\System\Table::createDB
         (
             [
-                'id' => 'personList',
-                'table' => 'person',
+                'id' => "personList",
+                'title' => "View People",
+                'table' => "person",
                 'include' => [
                     'id',
-                    'date',
                     'name_first',
-                    'name_last'
+                    'name_last',
+                    'phone',
+                    'date'
                 ],
                 'lang' => [
-                    'id'=>'UID',
-                    'date'=>'Date',
-                    'name_first'=>'First Name',
-                    'name_last'=>'Last Name'
+                    'id'         => 'User ID',
+                    'name_first' => 'First Name',
+                    'name_last'  => 'Last Name',
+                    'phone'      => 'Phone Number',
+                    'date'       => 'Date Added',
                 ],
-                'limit' => 1,
-                'cta' => true,
+                'limit'    => 25,
+                'cta'      => true,
                 'cta_link' => "index.php?view=personView&id=",
+                'process'  => [
+                    'name_first' => function( $v )
+                    {
+                        return strtoupper(substr($v, 0, 1) ) . strtolower( substr( $v, 1 ) );
+                    },
+                    'name_last'  => function( $v )
+                    {
+                        return strtoupper(substr($v, 0, 1) ) . strtolower( substr( $v, 1 ) );
+                    },
+                    'phone'      => function( $v )
+                    {
+                        $v = \preg_replace( "/[^0-9]/", "", $v );
+                        switch ( \strlen( (string)$v ) )
+                        {
+                            case 7:
+                                return \substr( $v, 0, 3 ) . "-" . \substr( $v, 2 );
+                                break;
+
+                            case 10:
+                                return "(" . \substr( $v,0,3) . ") " . \substr( $v, 3, 3 ) . "-" . \substr( $v, 6 );
+                                break;
+
+                            default:
+                                return \strlen( (string)$v ) > 10 ? "+" . \substr ($v, 0, \strlen( $v ) - 10 ) . " (" . \substr( $v,\strlen( $v ) - 10,3 ) . ") " . \substr( $v, \strlen( $v ) - 7, 3 ) . "-" . \substr( $v, \strlen( $v ) - 4 ) : $v;
+                                break;
+                        }
+                    },
+                    'date'       => function( $v )
+                    {
+                        return \date( ' g:i:s A - M j, Y', \strtotime( $v ) );
+                    }
+                ]
             ]
         );
 
@@ -125,7 +160,40 @@ class Template
      */
     public static function aidList(): array
     {
-        return [true, ""];
+        $table = \SVC\System\Table::createDB
+        (
+            [
+                'id' => 'aidList',
+                'title' => "View Aid",
+                'table' => 'aid',
+                'include' => [
+                    'id',
+                    'given',
+                    'account',
+                ],
+                'lang' => [
+                    'id'      =>'Entry ID',
+                    'given'   =>'Amount Given',
+                    'account' =>'Account',
+                ],
+                'limit'    => 25,
+                'cta'      => true,
+                'cta_link' => "index.php?view=personView&id=",
+                'process'  => [
+                    'given' => function( $v )
+                    {
+                        return "$ " . ( json_decode( $v )->amount ?? 0.0 );
+                    },
+                    'account'  => function( $v )
+                    {
+                        return "#" . $v;
+                    },
+                ]
+            ]
+        );
+
+
+        return [ true, (string) $table ];
     }
 
     /**

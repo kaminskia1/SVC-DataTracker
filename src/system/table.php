@@ -27,6 +27,7 @@ class Table
      * @var array Default table options
      */
     private $defaultArrayOptions = [
+        'title'    => "Title",
         'id'      => "\SVC\System\Table",
         'page'    => 0,
             'pageTag' => "page",
@@ -36,12 +37,14 @@ class Table
         'cta' => false,
         'cta_icon' => 'fa fa-arrow-right',
         'cta_link' => '',
+        'process' => []
     ];
 
     /**
      * @var array Default database table options
      */
     private $defaultDBOptions = [
+        'title'    => "Title",
         'id'      => "\SVC\System\Table\DB",
         'include' => "*",
         'table'   => "",
@@ -55,6 +58,7 @@ class Table
         'cta' => false,
             'cta_icon' => 'fa fa-arrow-right',
             'cta_link' => '',
+        'process' => []
     ];
 
     /**
@@ -195,6 +199,21 @@ class Table
             $this->data = $this->data->run()->fetchAll();
         }
 
+        // Data postprocessing
+        if ( count( $this->options['process'] ) > 0 )
+        {
+            for ( $i=0; $i< count( $this->data ); $i++ )
+            {
+                foreach ( $this->data[$i] as $k => $v)
+                {
+                    if ( array_key_exists($k, $this->options['process'] ) )
+                    {
+                        $this->data[$i][$k] = $this->options['process'][$k]($v);
+                    }
+                }
+            }
+        }
+
         // Table title lang
         if ( count( $this->options['lang']) > 0)
         {
@@ -211,16 +230,16 @@ class Table
         {
             for ( $i=0; $i< count( $this->data ); $i++ )
             {
-                $this->data[$i]['_cta'] = [ 'icon' => $this->options['cta_icon'], 'link' => $this->options['cta_link'] . $this->data[0][ array_keys($this->data[0])[0] ] ];
+                $this->data[$i]['_cta'] = [ 'icon' => $this->options['cta_icon'], 'link' => $this->options['cta_link'] . $this->data[0][ array_keys( $this->data[0] )[0] ] ];
             }
         }
 
-        return \SVC\Init::$twig->load( \SVC\System\Request::i()->isAjax() ? "tableAjax.twig" : "table.twig" )->render([
+        return \SVC\Init::$twig->load( \SVC\System\Request::i()->isAjax() && \SVC\System\Request::i()->pageAjax ? "tableAjax.twig" : "table.twig" )->render([
             'data' => $this->data,
             'options' => $this->options,
             'page' => [
                 'current' => $page ?: 0,
-                'max' => @$pageMax -1 ?: 1,
+                'max' => @$pageMax - 1 ?: 0,
             ]
         ]);
     }

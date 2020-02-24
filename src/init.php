@@ -124,7 +124,7 @@ class Init
                 ],
                 [
                     'icon'=>'fa fa-money',
-                    'callback'=>'aidView',
+                    'callback'=>'aidList',
                     'public_name'=>'View Aid',
                 ],
                 [

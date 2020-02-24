@@ -8,11 +8,64 @@ div.table-container {
     margin: 50px 100px;
 }
 
+div.table-container div.title {
+    height: 45px;
+    line-height: 60px;
+    margin-left: 24px;
+    font-size: 20px;
+    font-family: 'Roboto', sans-serif;
+}
+
+div.table-container table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+div.table-container table thead tr td {
+    font-size: 15px;
+    font-weight: 500;
+    color: #757575;
+    white-space: nowrap;
+    padding: 0;
+    padding-left: 0px;
+    height: 56px;
+    padding-left: 56px;
+    vertical-align: middle;
+    outline: none !important;
+    border-bottom: solid 1px #CCCCCC;
+}
+
+div.table-container table tbody tr td {
+    padding: 0 0 0 56px;
+    height: 48px;
+    font-size: 15px;
+    color: rgba(0, 0, 0, 0.87);
+    border-bottom: solid 1px #CCCCCC;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+div.table-container table tbody tr:hover {
+    background: #DDDDDD;
+    color: black !important;
+}
+
+div.table-container table tbody tr td.call-to-action a {
+    color: #757575;
+}
+
+div.table-container table tbody tr td.call-to-action a:hover {
+    color: blue;
+}
+
 div.button-container {
-    width: 80%;
-    height: 20px;
-    padding-left: 10%;
-    padding-right: 10%;
+    position: relative;
+    bottom: 0;
+    padding-top: 10px;
+    padding-right: 56px;
+    height: 28px;
+
 }
 
 div.button-float {
@@ -27,7 +80,12 @@ div.button-container div.button  {
     line-height: 20px;
     text-align: center;
     border-radius: 2px;
-    background-color: rgba(0,0,0,.2);
+    font-size: 20px;
+    color: #757575;
+}
+
+div.button-container div.button:not(.disabled)
+{
     cursor: pointer;
 }
 
