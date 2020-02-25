@@ -121,7 +121,7 @@ class PDO
     /**
      * Compile a query based off provided information
      *
-     * @return void
+     * @return string
      */
     private function _compileQuery(): string
     {
@@ -211,7 +211,7 @@ class PDO
                         case 'SELECT': /* ->select() */
 
                             // Explode array into column names, assume to string if not array
-                            $stmt .= ( is_array( $v ) ? implode( ",", $v) : $v ) . " FROM ";
+                            $stmt .= ( is_array( $v ) ? implode( ",", $v ) : $v ) . " FROM ";
                             break;
 
                         default:
@@ -219,9 +219,26 @@ class PDO
                     }
                     break;
 
-                // Send to where compiler
+                // Compile where arguments onto the clause
                 case 'where':
-                    $stmt .= $this->_compileWhereClause($v) . " ";
+
+
+                    switch ( gettype( $v ) )
+                    {
+                        case 'object':
+                            $v = (array)$v;
+                        case 'array':
+                            foreach ($v as $i => $r)
+                            {
+                                is_int( $i ) ? $stmt .= "$r " : $stmt .= "$i = $r ";
+                            }
+                            break;
+                        case 'string':
+                            $stmt .= $v;
+
+                    }
+
+
                     break;
 
                 // Append without padding on end
@@ -238,19 +255,10 @@ class PDO
     }
 
     /**
-     * Compile a where clause based off provided information
+     * Retrieve the compiled query
      *
-     * @TODO Finish this
-     *
-     * @param $data
      * @return string
      */
-    protected function _compileWhereClause( $data ): string
-    {
-        return $data;
-    }
-
-
     public function getQuery(): string
     {
         return $this->_compileQuery();
@@ -278,7 +286,7 @@ class PDO
             $a->execute();
 
             // Commit the change
-            static::$PDO->commit();
+            $this->commit();
 
             // Return the query response
             return $a;

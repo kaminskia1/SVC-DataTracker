@@ -99,11 +99,11 @@ class Template
                     {
                         return strtoupper(substr($v, 0, 1) ) . strtolower( substr( $v, 1 ) );
                     },
-                    'name_last'  => function( $v )
+                    'name_last' => function( $v )
                     {
                         return strtoupper(substr($v, 0, 1) ) . strtolower( substr( $v, 1 ) );
                     },
-                    'phone'      => function( $v )
+                    'phone' => function( $v )
                     {
                         $v = \preg_replace( "/[^0-9]/", "", $v );
                         switch ( \strlen( (string)$v ) )
@@ -121,7 +121,7 @@ class Template
                                 break;
                         }
                     },
-                    'date'       => function( $v )
+                    'date' => function( $v )
                     {
                         return \date( ' g:i:s A - M j, Y', \strtotime( $v ) );
                     }
@@ -150,6 +150,17 @@ class Template
      */
     public static function personView(): array
     {
+        $id = \SVC\System\Request::i()->id;
+        if ( !is_int( $id ) && \SVC\System\PDO::i()->select()->params('COUNT(*)')->table('Person')->where(['id'=>$id])->fetchAll()[0][0] == 0 )
+        {
+            return [false, ""];
+        }
+
+        $view = \SVC\System\View::generateView
+        (
+            new \SVC\Enum\Person( \SVC\System\Request::i()->id  ),
+            'personViewCustom.twig'
+        );
         return [true, ""];
     }
 
@@ -188,7 +199,7 @@ class Template
                     {
                         return "$ " . ( json_decode( $v )->amount ?? 0.0 );
                     },
-                    'account'  => function( $v )
+                    'account' => function( $v )
                     {
                         return "#" . $v;
                     },
@@ -227,7 +238,45 @@ class Template
      */
     public static function reportList(): array
     {
-        return [true, ""];
+        $table = \SVC\System\Table::createDB
+        (
+            [
+                'id'      => 'reportList',
+                'title'   => "View Reports",
+                'table'   => 'report',
+                'include' => [
+                    'id',
+                    'name',
+                    'date',
+                    'last_edited'
+                ],
+                'lang' => [
+                    'id'          =>'Entry ID',
+                    'name'        => "Name",
+                    'date'        =>'Generation Date',
+                    'last_edited' => 'Last Modified'
+                ],
+                'limit'    => 25,
+                'cta'      => true,
+                'cta_link' => "index.php?view=reportView&id=",
+                'process'  => [
+                    'name' => function( $v )
+                    {
+                        return strtoupper(substr($v, 0, 1) ) . strtolower( substr( $v, 1 ) );
+                    },
+                    'date' => function( $v )
+                    {
+                        return \date( ' g:i:s A - M j, Y', \strtotime( $v ) );
+                    },
+                    'last_edited' => function( $v )
+                    {
+                        return \date( ' g:i:s A - M j, Y', \strtotime( $v ) );
+                    }
+                ]
+            ]
+        );
+
+        return [ true, (string)$table ];
     }
 
     /**

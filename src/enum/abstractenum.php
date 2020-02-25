@@ -14,7 +14,15 @@ abstract class AbstractEnum
     use \SVC\Traits\ReadOnly;
     use \SVC\Traits\AbstractGetSet;
 
+    protected $_data;
+
     abstract public function __construct();
 
-    abstract public function save();
+    abstract public function save(): bool;
+
+    public function format(\Closure $func, $key): self
+    {
+        $this->$key = $func( $this->$key );
+    }
+
 }
