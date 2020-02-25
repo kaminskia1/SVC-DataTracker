@@ -10,45 +10,35 @@ if ( !defined("ENABLE") || @ENABLE != true )
 
 class Aid extends AbstractEnum
 {
+
+    /**
+     * @internal Available Variables
+     *
+     * // Table Columns
+     * $id
+     * $person_id
+     * $date
+     * $given
+     * $account
+     * $rent
+     * $landlord_address
+     * $extra
+     * $last_edited
+     *
+     * // Enum Variables
+     * $_aidRecipient
+     * $_data
+     */
+
     /**
      * Aid constructor.
      *
-     * @param array $p
+     * @param $p
      */
-    public function __construct( array $p = [] )
+    public function __construct( $p )
     {
-        if ( count( $p ) < 1 ) throw new \InvalidArgumentException( "No data provided!" );
-
-        $rows = \SVC\System\PDO::i()->select()->params( "*" )->table( 'Aid' )->where( $p )->run();
-
-        if ( $rows->count() < 1 ) throw new \PDOException( 'No rows found!' );
-
-        foreach ( $this->first() as $k => $v )
-        {
-            $this->$k = $v;
-        }
-        $this->_data = (array)$this->first();
+        parent::__construct( $p );
+        $this->_aidRecipient = new \SVC\Enum\Person( \SVC\System\PDO::i()->select()->param('*')->table('Person')->where(['id'=>$this->person_id])->run() );
     }
 
-
-    /**
-     * Save the current record
-     *
-     * @return bool
-     */
-    public function save(): bool
-    {
-        // Compile params
-        $p = [];
-        foreach ( (array)$this as $k => $v)
-        {
-            if ( (array)$this->_data[$k] !== $v)
-            {
-                array_push( $p, [ $k => $v ] );
-            }
-        }
-
-        // Run update query and return response
-        return (bool)@\SVC\System\PDO::i()->update()->table( 'Aid' )->params( (array)$p )->where([ 'id' => $this->id ]) ?? false;
-    }
 }

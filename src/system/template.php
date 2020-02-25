@@ -156,7 +156,7 @@ class Template
             return [false, ""];
         }
 
-        $view = \SVC\System\View::generateView
+        $view = \SVC\System\View::create
         (
             new \SVC\Enum\Person( \SVC\System\Request::i()->id  ),
             'personViewCustom.twig'
@@ -174,9 +174,9 @@ class Template
         $table = \SVC\System\Table::createDB
         (
             [
-                'id'      => 'aidList',
+                'id'      => "aidList",
                 'title'   => "View Aid",
-                'table'   => 'aid',
+                'table'   => "aid",
                 'include' => [
                     'id',
                     'person_id',
@@ -185,11 +185,11 @@ class Template
                     'last_edited'
                 ],
                 'lang' => [
-                    'id'          =>'Entry ID',
+                    'id'          => "Entry ID",
                     'person_id'   => "Issued to",
-                    'given'       =>'Amount Issued',
-                    'account'     =>'Account',
-                    'last_edited' => 'Last Modified'
+                    'given'       => "Amount Issued",
+                    'account'     => "Account",
+                    'last_edited' => "Last Modified"
                 ],
                 'limit'    => 25,
                 'cta'      => true,
@@ -241,9 +241,9 @@ class Template
         $table = \SVC\System\Table::createDB
         (
             [
-                'id'      => 'reportList',
+                'id'      => "reportList",
                 'title'   => "View Reports",
-                'table'   => 'report',
+                'table'   => "report",
                 'include' => [
                     'id',
                     'name',

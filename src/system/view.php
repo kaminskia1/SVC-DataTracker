@@ -15,7 +15,7 @@ class View
 
     private $template;
 
-    public static function generateView( \SVC\Enum\AbstractEnum $enum, $template = "defaultDisplay.twig"): self
+    public static function create( \SVC\Enum\AbstractEnum $enum, $template = "defaultDisplay.twig"): self
     {
         $x = new self();
         $x->enum = $enum;

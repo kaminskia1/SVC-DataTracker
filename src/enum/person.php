@@ -11,41 +11,45 @@ if ( !defined("ENABLE") || @ENABLE != true )
 class Person extends AbstractEnum
 {
 
-    public function __construct( array $p = [] )
-    {
-        if (count($p) < 1) throw new \InvalidArgumentException("No data provided!");
-
-        $rows = \SVC\System\PDO::i()->select()->params("*")->table('Person')->where($p)->run();
-
-        if ( $rows->count() < 1 ) throw new \PDOException('No rows found!');
-
-        foreach ( $this->first() as $k => $v )
-        {
-            $this->$k = $v;
-        }
-        $this->_data = (array)$this->first();
-
-    }
-
+    /**
+     * @internal Available Variables
+     *
+     * // Table Columns
+     * $id
+     * $date
+     * $name_first
+     * $name_last
+     * $phone
+     * $address
+     * $assistance
+     * $shutoff
+     * $shutoff_date
+     * $shutoff_referredby
+     * $family
+     * $employed
+     * $employed_location
+     * $last_edited
+     *
+     * // Enum Variables
+     * $_aidEntries
+     * $_data
+     */
 
     /**
-     * Save the current record
+     * Person constructor.
      *
-     * @return bool
+     * @param $p
      */
-    public function save(): bool
+    public function __construct( $p )
     {
-        // Compile params
-        $p = [];
-        foreach ( (array)$this as $k => $v)
+        parent::__construct( $p );
+        $q = \SVC\System\PDO::i()->select()->params('*')->table('Aid')->where([ 'id' => $this->id ])->run();
+        $arr = [];
+        for ($i=0;$i<$q->count();$i++)
         {
-            if ( $this->_data[$k] !== $v)
-            {
-                array_push( $p, [ $k => $v ] );
-            }
+            array_push($arr, new \SVC\Enum\Report($q, $i) );
         }
-
-        return (bool)@\SVC\System\PDO::i()->update()->table( 'Person' )->params( $p )->where([ 'id' => $this->_data['id'] ]) ?? false;
+        $this->_aidEntries = $arr;
     }
 
 }
