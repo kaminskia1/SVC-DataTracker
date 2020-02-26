@@ -15,7 +15,7 @@ class View
 
     private $template;
 
-    public static function create( \SVC\Enum\AbstractEnum $enum, $template = "defaultDisplay.twig"): self
+    public static function create( \SVC\Enum\AbstractEnum $enum, $template ): self
     {
         $x = new self();
         $x->enum = $enum;
@@ -25,7 +25,7 @@ class View
 
     public function __toString(): string
     {
-        return \SVC\Init::$twig->load($this->template)->render( $this->enum );
+        return \SVC\Init::$twig->load( $this->template )->render( $this->enum->encode() );
     }
 
 }

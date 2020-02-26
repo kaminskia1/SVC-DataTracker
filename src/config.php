@@ -30,5 +30,19 @@ class Config
      * @var string
      */
     public static $database = "svc.db";
+
+    /**
+     * Regexp sanitization filter, used in \SVC\System\Request
+     *
+     * @var string
+     */
+    public static $filter = "/[^A-Za-z0-9_]/";
+
+    /**
+     * Key to prevent prying eyes
+     *
+     * @var string
+     */
+    public static $key = "USA23";
 }
 

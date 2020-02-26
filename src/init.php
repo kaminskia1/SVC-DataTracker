@@ -56,8 +56,6 @@ class Init
             'strict_variables' => true,
         ] );
 
-
-
         return new self();
     }
 

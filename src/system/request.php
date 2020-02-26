@@ -42,7 +42,7 @@ class Request
     public function __get( string $param )
     {
         // Check if requested parameter is present; sanitize and return if so.
-        return isset( array_merge($_REQUEST, $_COOKIE)[$param] ) ? preg_replace( "/[^A-Za-z0-9_]/", "", filter_var( array_merge($_REQUEST, $_COOKIE)[$param], FILTER_SANITIZE_STRING ) ) : null;
+        return isset( array_merge($_REQUEST, $_COOKIE)[$param] ) ? preg_replace( \SVC\Config::$filter, "", filter_var( array_merge($_REQUEST, $_COOKIE)[$param], FILTER_SANITIZE_STRING ) ) : null;
     }
 
     /**

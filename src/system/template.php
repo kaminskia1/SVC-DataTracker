@@ -150,18 +150,24 @@ class Template
      */
     public static function personView(): array
     {
-        $id = \SVC\System\Request::i()->id;
-        if ( !is_int( $id ) && \SVC\System\PDO::i()->select()->params('COUNT(*)')->table('Person')->where(['id'=>$id])->fetchAll()[0][0] == 0 )
+        try {
+
+            $view = \SVC\System\View::create
+            (
+                new \SVC\Enum\Person([ 'id' => \SVC\System\Request::i()->id ]),
+                "personDisplay.twig"
+            );
+
+            return [ true, (string)$view ];
+        }
+        catch( \TypeError $e )
         {
             return [false, ""];
         }
-
-        $view = \SVC\System\View::create
-        (
-            new \SVC\Enum\Person( \SVC\System\Request::i()->id  ),
-            'personViewCustom.twig'
-        );
-        return [true, ""];
+        catch( \InvalidArgumentException $e )
+        {
+            return [false, ""];
+        }
     }
 
     /**
@@ -228,7 +234,23 @@ class Template
      */
     public static function aidView(): array
     {
-        return [true, ""];
+        try
+        {
+            $view = \SVC\System\View::create
+            (
+                new \SVC\Enum\Person([ 'id' => \SVC\System\Request::i()->id ]),
+                "aidDisplay.twig"
+            );
+            return [ true, (string)$view ];
+        }
+        catch( \TypeError $e )
+        {
+            return [false, ""];
+        }
+        catch( \InvalidArgumentException $e )
+        {
+            return [false, ""];
+        }
     }
 
     /**

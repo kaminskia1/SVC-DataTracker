@@ -141,8 +141,10 @@ class PDO
         // Cycle through each element in the callstack
         foreach ( $this->callStack as $k => $v )
         {
+            // Detect each value
             switch ( $k )
             {
+                // Cycle through parameters
                 case 'params':
                     switch ( $this->callStack['type'] )
                     {
@@ -222,7 +224,7 @@ class PDO
                 // Compile where arguments onto the clause
                 case 'where':
 
-
+                    $stmt .= "WHERE ";
                     switch ( gettype( $v ) )
                     {
                         case 'object':
