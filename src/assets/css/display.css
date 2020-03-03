@@ -1,0 +1,63 @@
+div.display {
+    height: 600px;
+    display: flex;
+    flex-direction: row;
+    flex-flow: column wrap;
+    max-width: 800px;
+    left: 50%;
+    position: relative;
+    transform: translateX(-50%);
+    margin-top: 60px;
+}
+
+div.display div.button {
+    max-width: 40%;
+    width: 150px;
+    left:0;
+    padding: 8px;
+    margin: 8px;
+}
+
+div.display div.card {
+    max-width: 50%;
+    background: #FFFFFF;
+    border-radius: 4px;
+    margin: 15px;
+    width: 350px;
+    padding: 8px;
+    grid-row: span 1;
+}
+
+div.display div.card.head {
+    height: 100px;
+}
+div.display div.card.contact {
+    height: 400px;
+}
+div.display div.card.action {
+    height: 70px;
+}
+div.display div.card.info {
+    height: 430px;
+}
+
+
+div.display div.card div.card-title {
+    font-size: 22px;
+}
+
+div.display div.card div.card-content {
+
+}
+
+div.display div.card div.card-content div.card-element {
+
+}
+
+div.display div.card div.card-content div.card-element-dropdown {
+
+}
+
+div.display div.card div.card-content div.card-element-sub {
+
+}

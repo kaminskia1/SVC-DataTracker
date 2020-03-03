@@ -1,14 +1,12 @@
 <link href="assets/css/display.css" type="text/css" rel="stylesheet" />
 
 <div class="display">
-    <div class="card">
+    <div class="card head">
         <div class="card-title">{{ name_last }}, {{ name_first }}</div>
         <div class="card-content">Member Since {{ _formattedDate }}</div>
     </div>
 
-    <div class="button edit">Edit</div>
-
-    <div class="card">
+    <div class="card contact">
         <div class="card-title">Contact</div>
         <div class="card-content">
             <div class="card-element">Phone: {{ _formattedPhone }}</div>
@@ -16,7 +14,14 @@
         </div>
     </div>
 
-    <div class="card">
+    <div class="card action">
+        <div class="card-content">
+            <div class="button edit">Edit</div>
+            <div class="button delete">Delete</div>
+        </div>
+    </div>
+
+    <div class="card info">
         <div class="card-title">Information</div>
         <div class="card-content">
 
