@@ -1,7 +1,8 @@
 $(document).ready(()=>
 {
     // Internet status
-    window.connected = function() {
+    window.connected = ()=>
+    {
         // Initiate POST request
         $.post({
             url: document.location.href,
@@ -24,8 +25,6 @@ $(document).ready(()=>
     {
         window.connected();
     }, 60000);
-
-
 
     // Navigation Bar Toggle
     $("header>i").click(()=>
@@ -61,7 +60,7 @@ $(document).ready(()=>
         window.redirect(a.currentTarget.id);
     });
 
-    window.redirect = function(a)
+    window.redirect = (a)=>
     {
         // Initiate POST request
         $.post({
@@ -101,7 +100,7 @@ $(document).ready(()=>
     }
 
     // Appends a (key => value) to the url without reloading. Used for tracking subpages
-    window.appendToUrl =  function(k, v)
+    window.appendToUrl = (k, v)=>
     {
         // u = [baseurl, params]
         let u = window.location.href.split('?');
@@ -148,11 +147,13 @@ $(document).ready(()=>
     }
 
     // Table buttons
-    $("body > div > div > div > div > div.button").click((a)=>{
+    $("body > div > div > div > div > div.button").click((a)=>
+    {
         window.tablePagination(a);
     });
 
-    window.tablePagination = (a)=> {
+    window.tablePagination = (a)=>
+    {
         if (a.currentTarget.classList[1] !== "disabled")
         {
             console.log("Page: " + a.currentTarget.classList[1]);

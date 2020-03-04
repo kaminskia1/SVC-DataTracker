@@ -233,6 +233,6 @@ footer {
 body div.viewport {
     width: 100%;
     height: calc( 100% - 48px );
-    background: #cccccc;
+    background: #e8e8e8;
     overflow-y: auto;
 }
