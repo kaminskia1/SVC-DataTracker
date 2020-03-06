@@ -7,9 +7,7 @@
         <thead>
             <tr>
                 {% for x,y in data[0] %}
-                    {% if x == "_cta" %}
-                        <td colspan="1" >CTA</td>
-                    {% else %}
+                    {% if x != "_cta" %}
                         <td colspan="2" >{{ x }}</td>
                     {% endif %}
                 {% endfor %}

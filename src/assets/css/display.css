@@ -4,31 +4,27 @@ div.display {
     background: #ffffff;
     border-radius: 6px;
     box-shadow: 0 2px 6px rgba(0,0,0,.2);
-    padding-bottom: 50px;
+    padding: 20px 24px;
     margin: 50px 100px;
 }
 
 div.display div.title {
     display: inline-block;
     height: 45px;
-    padding-top: 20px;
-    margin-left: 24px;
     font-size: 20px;
+    padding-bottom: 30px;
     font-family: 'Roboto', sans-serif;
 }
 
 div.display div.title div.title-main {
-    font-size: 20px;
-
+    font-size: 22px;
 }
 
 div.display div.title div.title-sub {
     font-size: 14px;
-
 }
 
 div.display div.button-container {
-    margin: 15px 15px 0 0;
     padding: 16px;
     position: relative;
     display: inline-block;
@@ -46,7 +42,6 @@ div.display div.button-container div.button {
     box-sizing: border-box;
     transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
     font-family: "Roboto", sans-serif;
-    font-weight: 500;
     line-height: 1.75;
     border-radius: 4px;
     letter-spacing: 0.02857em;
@@ -72,33 +67,39 @@ div.display div.button-container div.button.delete:hover {
     background-color: #e40051;
 }
 
+div.display div.card-container {
+    display: flex;
+}
+
 div.display div.card {
-
+    padding: 18px;
+    min-height: 75%;
+    box-shadow: 0 2px 6px rgba(0,0,0,.2);
 }
 
-div.display div.card.head {
+div.display div.card-container div.card.info {
+    margin-right: 8px;
+    width: calc(100% - 350px);
 }
 
-div.display div.card.contact {
+div.display div.card-container div.card.contact {
+    margin-left: 8px;
+    width: 332px;
 }
-
-div.display div.card.action {
-}
-
-div.display div.card.info {
-
-}
-
-
 
 div.display div.card div.card-title {
+    margin-top: -6px;
+    margin-left: -6px;
+    font-size: 20px;
+    padding-bottom: 15px;
 }
 
 div.display div.card div.card-content {
-
+    font-size: 18px;
 }
 
 div.display div.card div.card-content div.card-element {
+    padding-top: 15px;
 
 }
 

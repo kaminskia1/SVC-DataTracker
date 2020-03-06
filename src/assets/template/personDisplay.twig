@@ -12,61 +12,64 @@
         <div class="button delete">Delete</div>
     </div>
 
-    <div class="card contact">
-        <div class="card-title">Contact</div>
-        <div class="card-content">
-            <div class="card-element">Phone: {{ _formattedPhone }}</div>
-            <div class="card-element">Address: {{ address }}</div>
-        </div>
-    </div>
+    <div class="card-container">
+        <div class="card info">
+            <div class="card-title">Information</div>
+            <div class="card-content">
 
-    <div class="card info">
-        <div class="card-title">Information</div>
-        <div class="card-content">
+                <div class="card-element">Aid Given: ${{ _totalAidGiven }}</div>
+                <div class="card-element">Assistance: {{ assistance }}</div>
 
-            <div class="card-element">Aid Given: {{ _totalAidGiven }}</div>
-            <div class="card-element">Assistance: {{ assistance }}</div>
+                {% if shutoff %}
+                    <div class="card-element pointer">Shutoff: Yes</div>
+                    <div class="card-element-dropdown">
+                        <div class="card-element-sub">Date: {{ shutoff_date }}</div>
+                        <div class="card-element-sub">Reference: {{ shutoff_referredby }}</div>
+                    </div>
+                {% else %}
+                    <div class="card-element">Shutoff: No</div>
+                {% endif %}
 
-            {% if shutoff %}
-                <div class="card-element pointer">Shutoff: Yes</div>
+                {% if employed %}
+                    <div class="card-element">Employed: Yes</div>
+                    <div class="card-element">Location: {{ employed_location }}</div>
+                {% else %}
+                    <div class="card-element">Employed: No</div>
+                {% endif %}
+
+                {% if _formattedFamily|length > 0 %}
+                    <div class="card-element pointer">Family: Yes</div>
+                    <div class="card-element-dropdown">
+                        {% for x in _formattedFamily %}
+                            <div class="card-element-sub">{{ x.type }} {{ x.gender }}, {{ x.age }}</div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="card-element">Family: No</div>
+                {% endif %}
+
+                {% if _formattedExtra|length > 0 %}
+                <div class="card-element pointer">Extra:</div>
                 <div class="card-element-dropdown">
-                    <div class="card-element-sub">Date: {{ shutoff_date }}</div>
-                    <div class="card-element-sub">Reference: {{ shutoff_referredby }}</div>
-                </div>
-            {% else %}
-                <div class="card-element">Shutoff: No</div>
-            {% endif %}
-
-            {% if employed %}
-                <div class="card-element">Employed: Yes</div>
-                <div class="card-element">Location: {{ employed_location }}</div>
-            {% else %}
-                <div class="card-element">Employed: No</div>
-            {% endif %}
-
-            {% if _formattedFamily|length > 0 %}
-                <div class="card-element pointer">Family: Yes</div>
-                <div class="card-element-dropdown">
-                    {% for x in _formattedFamily %}
-                        <div class="card-element-sub">{{ x.type }} {{ x.gender }}, {{ x.age }}</div>
+                    {% for x in _formattedExtra %}
+                        <div class="card-element-sub">{{ x.k }}: {{ x.v }}</div>
                     {% endfor %}
                 </div>
-            {% else %}
-                <div class="card-element">Family: No</div>
-            {% endif %}
+                {% endif %}
 
-            {% if _formattedExtra|length > 0 %}
-            <div class="card-element pointer">Extra:</div>
-            <div class="card-element-dropdown">
-                {% for x in _formattedExtra %}
-                    <div class="card-element-sub">{{ x.k }}: {{ x.v }}</div>
-                {% endfor %}
+                <div class="card-element">Last Modified: {{ last_edited }}</div>
+
             </div>
-            {% endif %}
-
-            <div class="card-element">Last Modified: {{ last_edited }}</div>
-
         </div>
+
+        <div class="card contact">
+            <div class="card-title">Contact</div>
+            <div class="card-content">
+                <div class="card-element">Phone: {{ _formattedPhone }}</div>
+                <div class="card-element">Address: {{ address }}</div>
+            </div>
+        </div>
+
     </div>
 
 </div>
