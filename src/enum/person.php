@@ -32,12 +32,12 @@ class Person extends AbstractEnum
      * $extra
      *
      * // Enum Variables
-     * $_aidEntries
      * $_data
      * $_formattedPhone
      * $_formattedFamily
      * $_formattedDate
      * $_totalAidGiven
+     * $_aidTable
      */
 
     /**
@@ -54,8 +54,8 @@ class Person extends AbstractEnum
         {
             array_push($arr, new \SVC\Enum\Report($q, $i) );
         }
-        $this->_aidEntries = $arr;
 
+        // Format phone
         $v = \preg_replace( "/[^0-9]/", "", $this->phone );
         switch ( \strlen( (string)$v ) )
         {
@@ -71,11 +71,22 @@ class Person extends AbstractEnum
                 $v = \strlen( (string)$v ) > 10 ? "+" . \substr ($v, 0, \strlen( $v ) - 10 ) . " (" . \substr( $v,\strlen( $v ) - 10,3 ) . ") " . \substr( $v, \strlen( $v ) - 7, 3 ) . "-" . \substr( $v, \strlen( $v ) - 4 ) : $v;
                 break;
         }
+
+        // Define custom variables
         $this->_formattedPhone = $v;
+        $this->_aidEntries = $arr;
         $this->_formattedExtra = (array)json_decode($this->extra);
         $this->_formattedFamily = (array)json_decode($this->family);
+        $this->_formattedShutoff_date = \date( 'M j, Y', \strtotime( $this->shutoff_date ) );
         $this->_formattedDate = \date( 'M j, Y', \strtotime( $this->date ) );
-        $this->_totalAidGiven = 0.0;
+        $this->_totalAidGiven = (float)0.00;
+        $this->_aidTable = \SVC\System\Table::create( $arr, [
+            'title' => "",
+            'forceAjax' => true,
+            'limit' => 8,
+            'cta' => true
+        ] );
+
         foreach( $this->_aidEntries as $v )
         {
             $this->_totalAidGiven += $v->given;

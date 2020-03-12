@@ -194,19 +194,21 @@ class Init
                                 }
                             }
                         }
+
                         // Invalid callback provided, return 405: Method Not Allowed
                         \SVC\System\HTTP::error(405, "Method Not Allowed");
                     }
+
                     // No callback provided, return 400: Bad Request
                     \SVC\System\HTTP::error(400, "Bad Request");
                     break;
 
                 case 'push':
                     // Check that callback is provided
-                    if ( !is_null( $callback = \SVC\System\Request::i()->callback ) && !is_null( $data = \SVC\System\Request::i()->data ) )
+                    if ( !is_null( $callback = \SVC\System\Request::i()->callback ) )
                     {
                         // Check that provided callback exists
-                        if ( method_exists( new \SVC\System\Template(), $callback ) )
+                        if ( method_exists( new \SVC\System\Push(), $callback ) )
                         {
                             // Check that provided callback is public
                             $ref = new \ReflectionMethod(new \SVC\System\Push(), $callback );
@@ -216,14 +218,16 @@ class Init
                                 ! \SVC\Config::$debug ? ob_clean() : null;
 
                                 // Run push callback and output response
-                                die( \SVC\System\Push::i()->$callback( $data ) );
+                                die( \SVC\System\Push::i()->$callback() );
                             }
+
                             // Invalid callback provided, return 405: Method Not Allowed
-                            \SVC\System\HTTP::error(405, "Method Not Allowed");
+                            \SVC\System\HTTP::JSONerror(200, "Method Not Allowed");
                         }
                     }
+
                     // No callback provided, return 400: Bad Request
-                    \SVC\System\HTTP::error(400, "Bad Request");
+                    \SVC\System\HTTP::JSONerror(200, "Bad Request");
                     break;
 
                 default:

@@ -51,15 +51,17 @@ div.table-container table tbody tr:hover {
     color: black !important;
 }
 
-div.table-container table tbody tr td.call-to-action a {
+div.table-container table tbody tr td.call-to-action i{
+    cursor: pointer;
+    transition: .2s all;
     color: #757575;
 }
 
-div.table-container table tbody tr td.call-to-action a:hover {
+div.table-container table tbody tr td.call-to-action i:hover {
     color: blue;
 }
 
-div.button-container {
+div.table-container div.button-container {
     position: relative;
     bottom: 0;
     padding-top: 10px;
@@ -68,11 +70,11 @@ div.button-container {
 
 }
 
-div.button-float {
+div.table-container div.button-float {
     float: right;
 }
 
-div.button-container div.button  {
+div.table-container div.button-container div.button  {
     display: inline-block;
     margin: 3px;
     width: 20px;

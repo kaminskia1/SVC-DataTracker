@@ -69,22 +69,29 @@ div.display div.button-container div.button.delete:hover {
 
 div.display div.card-container {
     display: flex;
+    justify-content: space-between;
 }
 
 div.display div.card {
     padding: 18px;
-    min-height: 75%;
     box-shadow: 0 2px 6px rgba(0,0,0,.2);
 }
 
 div.display div.card-container div.card.info {
     margin-right: 8px;
-    width: calc(100% - 350px);
+    min-height: 75%;
+    width: calc(100% - 400px);
 }
 
 div.display div.card-container div.card.contact {
     margin-left: 8px;
-    width: 332px;
+    margin-bottom: 8px;
+    width: 309px !important;
+}
+
+div.display div.card-container div.card.aid {
+    margin-left: 8px;
+    width: 309px !important;
 }
 
 div.display div.card div.card-title {
@@ -100,13 +107,13 @@ div.display div.card div.card-content {
 
 div.display div.card div.card-content div.card-element {
     padding-top: 15px;
-
 }
 
 div.display div.card div.card-content div.card-element-dropdown {
-
-}
-
-div.display div.card div.card-content div.card-element-sub {
-
+    margin-left: 2px;
+    margin-top: 4px;
+    border-left: 3px solid rgba(0,0,0,.1);
+    padding-left: 8px;
+    line-height: 30px;
+    margin-bottom: 16px;
 }

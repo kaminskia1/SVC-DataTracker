@@ -281,6 +281,7 @@ class PDO
         }
         else
         {
+            static::$PDO->beginTransaction();
             // Prepare the statement
             $a = static::$PDO->prepare( $query ?: $this->_compileQuery() );
 

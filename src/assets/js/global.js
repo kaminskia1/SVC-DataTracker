@@ -1,7 +1,9 @@
-$(document).ready(()=>
+$(document).ready( () =>
 {
-    // Internet status
-    window.connected = ()=>
+    /**
+     * Check internet connection
+     */
+    window.connected = () =>
     {
         // Initiate POST request
         $.post({
@@ -19,76 +21,45 @@ $(document).ready(()=>
         });
     };
 
-    // Internet status loop, check every minute
-    window.connected();
-    setTimeout(()=>
+    /**
+     * Reload this script
+     */
+    window.reload = () =>
     {
-        window.connected();
-    }, 60000);
+        $(" head > script.global ").remove();
+        $(" head ").append("<script id=\"global\" src=\"assets/js/global.js\"></script>");
+    };
 
-    // Navigation Bar Toggle
-    $("header>i").click(()=>
-    {
-        // Flip navigation class based off preexisting class
-        if ( $("nav").hasClass("active") )
-        {
-            $("nav").removeClass("active");
-        }
-        else
-        {
-            $("nav").addClass("active");
-        }
-    });
-
-    // Bind to barrier aswell
-    $("nav>.barrier").click(()=>
-    {
-        if ( $("nav").hasClass("active") )
-        {
-            $("nav").removeClass("active");
-        }
-    });
-
-    // Dashboard card redirects
-    $("body>div >div>div>div>div.head>i").click((a) => {
-        window.redirect(a.currentTarget.id)
-    });
-
-    // Navigation Bar Requests
-    $("nav>ul>li").click((a)=>
-    {
-        window.redirect(a.currentTarget.id);
-    });
-
-    window.redirect = (a)=>
+    /**
+     * Redirect through Ajax
+     *
+     * @param location
+     * @param data
+     */
+    window.redirect = ( location, data = {} )=>
     {
         // Initiate POST request
+        Object.assign(data, {
+            do: "template",
+            callback: location,
+        });
         $.post({
             url: document.location.href,
             cache: false,
-            data: {
-                do: "template",
-                callback: a,
-            },
+            data: data,
             success: (b)=>
             {
                 // Set viewport to response and bind view to url
-                $("body>div.viewport").fadeTo(300, 0, ()=>
+                $("body>div.viewport").fadeTo(300, 0, () =>
                 {
                     setTimeout(()=>
                     {
+                        // Fade in and reload
                         $("body>div.viewport").html(b).fadeTo(300, 1);
-                        $("body>div >div>div>div>div.head>i").click((c) => {
-                            window.redirect(c.currentTarget.id);
-                        });
-
-                        $("body > div > div > div > div > div.button").click((d)=>{
-                            window.tablePagination(d);
-                        });
-
+                        window.bind();
                     }, 400);
                 });
-                window.appendToUrl('view', a);
+                window.appendToUrl('view', location);
 
                 // Close navigation
                 if ( $("nav").hasClass("active") )
@@ -97,10 +68,15 @@ $(document).ready(()=>
                 }
             }
         });
-    }
+    };
 
-    // Appends a (key => value) to the url without reloading. Used for tracking subpages
-    window.appendToUrl = (k, v)=>
+    /**
+     * Appends a (key => value) to the url without reloading. Used for tracking subpages
+     *
+     * @param k Key
+     * @param v Value
+     */
+    window.appendToUrl = ( k, v ) =>
     {
         // u = [baseurl, params]
         let u = window.location.href.split('?');
@@ -144,15 +120,14 @@ $(document).ready(()=>
             // Replace old URL with new URL in history object
             window.history.replaceState({}, document.title, u[0] + '?' + q);
         }
-    }
+    };
 
-    // Table buttons
-    $("body > div > div > div > div > div.button").click((a)=>
-    {
-        window.tablePagination(a);
-    });
-
-    window.tablePagination = (a)=>
+    /**
+     * Table Pagination
+     *
+     * @param a ButtonElement
+     */
+    window.tablePagination = ( a ) =>
     {
         if (a.currentTarget.classList[1] !== "disabled")
         {
@@ -168,15 +143,18 @@ $(document).ready(()=>
                 },
                 success: (b) =>
                 {
-                    $(a.currentTarget.parentElement.parentElement.parentElement.children[1].children[1]).fadeTo(200, 0, () => {
+                    $(a.currentTarget.parentElement.parentElement.parentElement.children[1].children[1]).fadeTo(200, 0, () =>
+                    {
                         setTimeout(() => {
                             $(a.currentTarget.parentElement.parentElement.parentElement).html(b);
                             window.test = a.currentTarget.parentElement.parentElement.parentElement;
                             $("body > div > div > table > tbody").fadeTo(200, 1);
-                            $("body>div >div>div>div>div.head>i").click((c) => {
+                            $("body>div >div>div>div>div.head>i").click( ( c ) =>
+                            {
                                 window.redirect(c.currentTarget.id);
                             });
-                            $("body > div > div > div > div > div.button").click((d)=>{
+                            $("body > div > div > div > div > div.button").click( ( d ) =>
+                            {
                                 window.tablePagination(d);
                             });
                         }, 200);
@@ -184,5 +162,140 @@ $(document).ready(()=>
                 }
             });
         }
-    }
+    };
+
+    /**
+     * Emulate PHP's $_GET
+     *
+     * @param a URI
+     * @returns {*}
+     */
+    window.get = ( a ) =>
+    {
+        let y = window.location.search.substr(1).split("&");
+        let x = {};
+        for ( let i = 0; i < y.length; i++ )
+        {
+            x[decodeURIComponent( y[ i ].split( "=" )[ 0 ] ) ] = decodeURIComponent( y[ i ].split( "=" )[ 1 ] );
+        }
+        return x[a];
+    };
+
+    /**
+     * Viewport Attribute Binding
+     */
+    window.bind = () =>
+    {
+        // Dashboard card redirects
+        $("body>div >div>div>div>div.head>i").click( ( a ) => {
+            window.redirect(a.currentTarget.id)
+        });
+
+        // Table buttons
+        $("body > div > div > div > div > div.button").click( ( a ) =>
+        {
+            window.tablePagination(a);
+        });
+
+        // Table CTA Redirects
+        $(" #personList > tbody > tr > td.call-to-action").click((a)=>
+        {
+            let x;
+            a.currentTarget.classList[1]
+                .split("&")
+                .map(n => n
+                    .split("=")
+                )
+                .forEach((a)=>{
+                    if ( a[0] == "view" ) x = a[1];
+                    window.appendToUrl(a[0], a[1])
+                });
+            window.redirect( x );
+        });
+
+        // Display buttons
+        $("body > div > div > div.button-container > div.button").click( ( a ) =>
+        {
+            switch ( a.currentTarget.classList[1] )
+            {
+                // Redirect to addAid, id is already present in the URI
+                case 'add':
+                    window.redirect( 'addAid');
+                    break;
+
+                case 'edit':
+                    break;
+
+                case 'delete':
+                    if ( confirm( "Are you sure you wish to delete Person #" + window.get( 'id' ) + "?\n\nWARNING: THIS CAN NOT BE UNDONE!" ) )
+                    {
+                        $.post({
+                            url: document.location.href,
+                            cache: false,
+                            dataType: "json",
+                            data: {
+                                do: "push",
+                                callback: "deletePerson",
+                                id: window.get( 'id' ),
+                            },
+                            success: ( b ) =>
+                            {
+                                if ( b[0] )
+                                {
+                                    alert( "Person #" + window.get( 'id' ) + " has successfully been deleted!");
+                                }
+                                else
+                                {
+                                    alert( "Error encountered when deleting Person #" + window.get( 'id' ) + "!");
+                                }
+                                window.appendToUrl('id', "");
+                                window.redirect("personList");
+                            }
+                        });
+                    }
+                    break;
+            }
+        });
+
+    };
+
+    // Internet status loop, check every minute
+    window.connected();
+    setTimeout(()=>
+    {
+        window.connected();
+    }, 60000);
+
+    // Run bind
+    window.bind();
+
+    // Navigation Bar Toggle
+    $("header>i").click(()=>
+    {
+        // Flip navigation class based off preexisting class
+        if ( $("nav").hasClass("active") )
+        {
+            $("nav").removeClass("active");
+        }
+        else
+        {
+            $("nav").addClass("active");
+        }
+    });
+
+    // Navigation Bar Requests
+    $("nav>ul>li").click((a)=>
+    {
+        window.redirect(a.currentTarget.id);
+    });
+
+    // Bind to barrier aswell
+    $("nav>.barrier").click(()=>
+    {
+        if ( $("nav").hasClass("active") )
+        {
+            $("nav").removeClass("active");
+        }
+    });
+
 });

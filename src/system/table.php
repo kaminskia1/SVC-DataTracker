@@ -37,7 +37,8 @@ class Table
         'cta' => false,
         'cta_icon' => 'fa fa-arrow-right',
         'cta_link' => '',
-        'process' => []
+        'process' => [],
+        'forceAjax' => false,
     ];
 
     /**
@@ -58,7 +59,8 @@ class Table
         'cta' => false,
             'cta_icon' => 'fa fa-arrow-right',
             'cta_link' => '',
-        'process' => []
+        'process' => [],
+        'forceAjax' => false,
     ];
 
     /**
@@ -243,11 +245,14 @@ class Table
             {
                 for ( $i=0; $i < count( $this->data ); $i++ )
                 {
-                    $this->data[ $i ][ '_cta' ] = [ 'icon' => $this->options[ 'cta_icon' ], 'link' => $this->options[ 'cta_link' ] . $this->data[ 0 ][ array_keys( $this->data[ 0 ] ) [ 0 ] ] ];
+                    $this->data[ $i ][ '_cta' ] = [
+                        'icon' => $this->options[ 'cta_icon' ],
+                        'link' => $this->options[ 'cta_link' ] . $this->data[ $i ][ array_keys( $this->data[ $i ] ) [ 0 ] ] ];
                 }
             }
 
-            return \SVC\Init::$twig->load( \SVC\System\Request::i()->isAjax() && \SVC\System\Request::i()->pageAjax ? "tableAjax.twig" : "table.twig" )->render([
+            // Render
+            return \SVC\Init::$twig->load( ( \SVC\System\Request::i()->isAjax() && \SVC\System\Request::i()->pageAjax ) || $this->options['forceAjax'] ? "tableAjax.twig" : "table.twig" )->render([
                 'data' => $this->data,
                 'options' => $this->options,
                 'page' => [
@@ -257,7 +262,7 @@ class Table
             ]);
         }
 
-        return \SVC\Init::$twig->load( "tableError.twig" )->render([
+        return \SVC\Init::$twig->load( ( \SVC\System\Request::i()->isAjax() && \SVC\System\Request::i()->pageAjax ) || $this->options['forceAjax'] ? "tableAjaxError.twig" : "tableError.twig" )->render([
             'options' => $this->options,
             'error' => 'No data to show!'
         ]);

@@ -93,7 +93,7 @@ class Template
                 ],
                 'limit'    => 25,
                 'cta'      => true,
-                'cta_link' => "index.php?view=personView&id=",
+                'cta_link' => "view=personView&id=",
                 'process'  => [
                     'name_first' => function( $v )
                     {

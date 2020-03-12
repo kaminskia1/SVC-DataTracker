@@ -2,7 +2,7 @@
 
 <div class="display">
     <div class="title">
-        <div class="title-main">{{ name_last }}, {{ name_first }}</div>
+        <div class="title-main">{{ name_last }}, {{ name_first }} #{{ id }}</div>
         <div class="title-sub">Member Since {{ _formattedDate }}</div>
     </div>
 
@@ -18,13 +18,13 @@
             <div class="card-content">
 
                 <div class="card-element">Aid Given: ${{ _totalAidGiven }}</div>
-                <div class="card-element">Assistance: {{ assistance }}</div>
+                <div class="card-element">Assistance: <span id="p_assistance">{{ assistance }}</span></div>
 
                 {% if shutoff %}
                     <div class="card-element pointer">Shutoff: Yes</div>
                     <div class="card-element-dropdown">
-                        <div class="card-element-sub">Date: {{ shutoff_date }}</div>
-                        <div class="card-element-sub">Reference: {{ shutoff_referredby }}</div>
+                        <div class="card-element-sub">Date: <span id="p_shutoff_date">{{ _formattedShutoff_date }}</span></div>
+                        <div class="card-element-sub">Reference: <span id="p_shutoff_referredby">{{ shutoff_referredby }}</span></div>
                     </div>
                 {% else %}
                     <div class="card-element">Shutoff: No</div>
@@ -32,7 +32,9 @@
 
                 {% if employed %}
                     <div class="card-element">Employed: Yes</div>
-                    <div class="card-element">Location: {{ employed_location }}</div>
+                    <div class="card-element-dropdown">
+                        <div class="card-element-sub">Location: <span id="p_employed_location">{{ employed_location }}</span></div>
+                    </div>
                 {% else %}
                     <div class="card-element">Employed: No</div>
                 {% endif %}
@@ -40,8 +42,8 @@
                 {% if _formattedFamily|length > 0 %}
                     <div class="card-element pointer">Family: Yes</div>
                     <div class="card-element-dropdown">
-                        {% for x in _formattedFamily %}
-                            <div class="card-element-sub">{{ x.type }} {{ x.gender }}, {{ x.age }}</div>
+                        {% for x,y in _formattedFamily %}
+                            <div class="card-element-sub p_family_member_{{ x }}">{{ y.type }} {{ y.gender }}, {{ y.age }}</div>
                         {% endfor %}
                     </div>
                 {% else %}
@@ -51,8 +53,8 @@
                 {% if _formattedExtra|length > 0 %}
                 <div class="card-element pointer">Extra:</div>
                 <div class="card-element-dropdown">
-                    {% for x in _formattedExtra %}
-                        <div class="card-element-sub">{{ x.k }}: {{ x.v }}</div>
+                    {% for x,y in _formattedExtra %}
+                        <div class="card-element-sub p_extra_{{ x }}">{{ x }}: {{ y }}</div>
                     {% endfor %}
                 </div>
                 {% endif %}
@@ -61,12 +63,21 @@
 
             </div>
         </div>
+        <div class="card-secondary">
 
-        <div class="card contact">
-            <div class="card-title">Contact</div>
-            <div class="card-content">
-                <div class="card-element">Phone: {{ _formattedPhone }}</div>
-                <div class="card-element">Address: {{ address }}</div>
+            <div class="card contact">
+                <div class="card-title">Contact</div>
+                <div class="card-content">
+                    <div class="card-element">Phone: <span id="p_phone">{{ _formattedPhone }}</span></div>
+                    <div class="card-element">Address: <span id="p_address">{{ address }}</span></div>
+                </div>
+            </div>
+
+            <div class="card aid">
+                <div class="card-title">Entries</div>
+                <div class="card-content">
+                    {{ _aidTable|raw }}
+                </div>
             </div>
         </div>
 
