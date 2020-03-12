@@ -26,10 +26,10 @@ class Person extends AbstractEnum
      * $shutoff_date -
      * $shutoff_referredby -
      * $family -
-     * $employed
-     * $employed_location
-     * $last_edited
-     * $extra
+     * $employed -
+     * $employed_location -
+     * $last_edited -
+     * $extra -
      *
      * // Enum Variables
      * $_data
@@ -43,7 +43,7 @@ class Person extends AbstractEnum
     /**
      * Person constructor.
      *
-     * @param $p
+     * @param mixed $p Person ID
      */
     public function __construct( $p )
     {

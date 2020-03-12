@@ -171,6 +171,46 @@ class Template
     }
 
     /**
+     * Edit the person
+     *
+     * @return array
+     */
+    public static function personEdit(): array
+    {
+        // Check that person exists
+        if ( is_null( \SVC\System\Request::i()->id ) ) return [false, ""];
+
+        // Create the person
+        $person = new \SVC\Enum\Person( (int)\SVC\System\Request::i()->id );
+
+        // Create the form
+        $form = new \SVC\System\Form("personEdit", ['title' => "Edit Person"] );
+
+        // Add form elements
+        $form->add("name_first", [ 'type'=>'text', 'value'=>$person->name_first ] );
+        $form->add("phone", [ 'type'=>'text', 'value'=>$person->phone ] );
+        $form->add("address", [ 'type'=>'text', 'value'=>$person->address ] );
+        $form->add("assistance", [ 'type'=>'text', 'value'=>$person->assistance ] );
+        $form->add("shutoff", [ 'type'=>'text', 'value'=>$person->shutoff ] );
+        $form->add("shutoff_date", [ 'type'=>'text', 'value'=>$person->shutoff_date ] );
+        $form->add("shutoff_referredby", [ 'type'=>'text', 'value'=>$person->shutoff_referredby ] );
+        $form->add("family", [ 'type'=>'text', 'value'=>$person->family ] );
+        $form->add("employed", [ 'type'=>'text', 'value'=>$person->employed ] );
+        $form->add("employed_location", [ 'type'=>'text', 'value'=>$person->employed_location ] );
+        $form->add("extra", [ 'type'=>'text', 'value'=>$person->extra ] );
+
+        // Check if form has been submitted
+        if ($values = $form->values() )
+        {
+
+            return [true, json_encode($values)];
+        }
+
+        // Return the form
+        return [true, (string)$form];
+    }
+
+    /**
      * Aid List Template
      *
      * @return array

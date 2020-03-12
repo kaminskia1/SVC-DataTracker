@@ -1,0 +1,37 @@
+{# This hurts to visualize #}
+{% macro render_object(obj, maxdepth, currentdepth = 0) %}
+    {% import _self as m %}
+    {% for sub in obj %}
+        <li>
+            <a href="{{ sub.href }}">{{ sub.name }}</a>
+            {% if sub.sublinks %}
+                <ul>
+                    {{ m.render_object(obj, maxdepth, currentdepth + 1) }}
+                </ul>
+            {% endif %}
+        </li>
+    {% endfor %}
+{% endmacro %}
+
+<link href="assets/css/display.css" type="text/css" rel="stylesheet" />
+
+{# Use <div> insted of <form> because of ajax #}
+<div class="form" id="{{ options.id }}">
+    <div class="title">{{ options.title }}</div>
+    <div class="elements">
+        {% for x,y in callstack %}
+            <div class="element">
+                {% if y.type == "string" %}
+                    <input type="text" id="{{ x }}" value="{{ y.value }}" minlength="{{ y.min }}" maxlength="{{ y.max }}" />
+                {% elseif y.type == "number" %}
+                    <input type="number" id="{{ x }}" value="{{ y.value }}" min="{{ y.min }}" max="{{ y.max }}" />
+                {% elseif y.type == "object" %}
+                    <div class="object" id="{{ x }}" length="{{ y.length }}">
+                        { self.render_object(a, y.depth) }}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+    <div class="submit"></div>
+</div>

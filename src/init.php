@@ -171,6 +171,7 @@ class Init
             {
                 case 'connection':
                     die( (bool)\SVC\System\HTTP::internetConnection() );
+
                 case 'template':
                     // Check that callback is provided
                     if ( !is_null( $callback = \SVC\System\Request::i()->callback ) )
@@ -196,11 +197,11 @@ class Init
                         }
 
                         // Invalid callback provided, return 405: Method Not Allowed
-                        \SVC\System\HTTP::error(405, "Method Not Allowed");
+                        \SVC\System\HTTP::JSONerror(405, "Method Not Allowed");
                     }
 
                     // No callback provided, return 400: Bad Request
-                    \SVC\System\HTTP::error(400, "Bad Request");
+                    \SVC\System\HTTP::JSONerror(400, "Bad Request");
                     break;
 
                 case 'push':
@@ -232,7 +233,7 @@ class Init
 
                 default:
                     // No request type provided, return 400: Bad Request
-                    \SVC\System\HTTP::error(400, "Bad Request");
+                    \SVC\System\HTTP::JSONerror(400, "Bad Request");
                     break;
             }
         }

@@ -224,6 +224,7 @@ $(document).ready( () =>
                     break;
 
                 case 'edit':
+                    window.redirect( 'personEdit' );
                     break;
 
                 case 'delete':

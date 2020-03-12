@@ -6,7 +6,7 @@
 - ~~Add `date DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL` onto table Aid~~
 - Fix navigation padding between icon and text
 - Add template functions for addPerson, addAid, addReport, and viewReport
-- Add a generic class to manage addX
+- Add a generic class to manage addX (\Form display)
 - ~~Add view class to manage viewX displaying~~
 - Add report generation
 - Change \SVC\System\Table Call-to-action redirect to ajax, instead of page reload
