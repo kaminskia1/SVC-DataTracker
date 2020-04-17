@@ -1,0 +1,148 @@
+form.form {
+    width: calc( 100% - 200px );
+    min-height: calc( 100% - 200px );
+    background: #ffffff;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.2);
+    padding: 20px 24px;
+    margin: 50px 100px;
+}
+
+form.form div.title {
+    display: inline-block;
+    height: 45px;
+    font-size: 20px;
+    font-family: 'Roboto', sans-serif;
+}
+
+form.form div.elements {
+    padding: 5px;
+}
+
+
+form.form div.elements div.element {
+    padding: 10px;
+}
+
+form.form div.elements div.element div.name {
+    display: inline-block;
+}
+
+form.form div.elements div.element input[type="checkbox"] {
+    display: inline-block;
+    min-width: 0px;
+}
+
+form.form div.elements div.element input {
+    display: block;
+    border: 0;
+    min-width: 210px;
+    border-bottom: 1px solid #e0e0e0;
+    outline: 0;
+    font-size: 16px;
+    margin-top: 8px;
+    margin-left: 8px;
+}
+
+form.form div.elements div.element input:focus {
+    border: 0px;
+    border-bottom: 1px solid #819ca9;
+}
+
+form.form div.button {
+    cursor: pointer;
+    margin-left: 8px;
+    margin-right: 8px;
+    padding: 6px 16px;
+    font-size: 0.875rem;
+    min-width: 64px;
+    font-weight: 500;
+    color: black;
+    box-sizing: border-box;
+    transition: background-color .2s cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    font-family: "Roboto", sans-serif;
+    line-height: 1.75;
+    border-radius: 4px;
+    letter-spacing: 0.02857em;
+    text-transform: uppercase;
+    display: inline-block;
+}
+
+form.form div.button:hover {
+    background-color: rgba(0,0,0,.1);
+}
+
+form.form div.button:active {
+    background-color: rgba(0,0,0,.15);
+}
+
+form.form div.button.submit {
+    background-color: #3F51B5;
+    color: white;
+    box-shadow: 0px 3px 1px -2px
+    rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px
+    rgba(0,0,0,0.12);
+}
+
+form.form div.button.submit:hover {
+    background-color: #3f51d2;
+    box-shadow: 0px 3px 1px -2px
+    rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px
+    rgba(0,0,0,0.12);
+}
+
+form.form div.button.submit:active {
+    background-color: #3f51e6;
+    box-shadow: 0 0 20px rgba(0,0,0,0.25);
+}
+
+form.form .object-element,.array-element {
+    margin-left: 2px;
+    margin-top: 4px;
+    border-left: 3px solid rgba(0,0,0,.1);
+    padding-left: 8px;
+    line-height: 30px;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+}
+
+form.form .object-element:hover,.array-element:hover {
+    border-left: 3px solid rgba(0,0,0,.175);
+}
+
+form.form .array-element-name {
+    margin-bottom: 8px;
+    min-width: 100px !important;
+    width: 100px !important;
+    display: inline-block !important;
+}
+
+form.form textarea.array-element-value {
+    resize: vertical;
+    background-color: rgba(0,0,0,0);
+    margin-left: 16px;
+    display: block;
+    margin-top: 8px;
+}
+
+form.form div.array-element-remove {
+
+}
+
+form.form div.object,div.array {
+    padding-left: 12px;
+    padding-top: 12px;
+    border-left: 3px solid rgba(0,0,0,.1);
+}
+
+form.form div.object:hover,div.array:hover {
+    border-left: 3px solid rgba(0,0,0,.175);
+}
+
+form.form .object,.array {
+    margin-left: 12px;
+}
+
+form.form div.object-element-remove {
+    margin: 8px 0;
+}

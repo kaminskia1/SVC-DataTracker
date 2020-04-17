@@ -10,13 +10,15 @@
 - ~~Add view class to manage viewX displaying~~
 - Add report generation
 - Change \SVC\System\Table Call-to-action redirect to ajax, instead of page reload
-- Complete \SVC\System\Push, then implement for usage in updating data
+- ~~Complete \SVC\System\Push, then implement for usage in updating data~~
 - Center cards on dashboard when < 3 are displayed per row (`@media`?)
 - Implement basic authentication to dissuade prying eyes ( Hardcoded key in /SVC/Config, not hashed, stored as local session cookie )
 - ~~Add \SVC\System\Table\DB instance on reportList viewport~~
 - Add Report viewing on reportView viewport using \SVC\System\Table
 - Add accessibility options (disable animations, change default color schema, modify default font family / size) 
 - Add a wiki
+- Replace global error exceptions with custom ones
+- Convert references to imports
 - Finalize internal documentation
 - Add PHPUnit tests
 - Add PHPUnit tests to github workflow

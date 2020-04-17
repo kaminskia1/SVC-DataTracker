@@ -29,9 +29,10 @@ abstract class AbstractEnum
                 {
                     $this->$k = $v;
                 }
-                $this->_data = (array)$p->first();
+                $this->_data = (array)$p->fetch();
                 break;
 
+            // No 'break' intended here (converts to array and overflows into array case)
             case 'object':
                 $p = (array)$p;
             case 'array':
@@ -57,7 +58,7 @@ abstract class AbstractEnum
                 {
                     $this->$k = $v;
                 }
-                $this->_data = (array)$rows->first();
+                $this->_data = (array)$rows->fetch();
                 break;
                 
             default:

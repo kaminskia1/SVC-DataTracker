@@ -178,36 +178,118 @@ class Template
     public static function personEdit(): array
     {
         // Check that person exists
-        if ( is_null( \SVC\System\Request::i()->id ) ) return [false, ""];
+        if ( is_null( \SVC\System\Request::i()->id ) ) return [ false, "" ];
 
         // Create the person
-        $person = new \SVC\Enum\Person( (int)\SVC\System\Request::i()->id );
+        $person = new \SVC\Enum\Person([ 'id' => \SVC\System\Request::i()->id ]);
 
         // Create the form
         $form = new \SVC\System\Form("personEdit", ['title' => "Edit Person"] );
 
         // Add form elements
-        $form->add("name_first", [ 'type'=>'text', 'value'=>$person->name_first ] );
-        $form->add("phone", [ 'type'=>'text', 'value'=>$person->phone ] );
-        $form->add("address", [ 'type'=>'text', 'value'=>$person->address ] );
-        $form->add("assistance", [ 'type'=>'text', 'value'=>$person->assistance ] );
-        $form->add("shutoff", [ 'type'=>'text', 'value'=>$person->shutoff ] );
-        $form->add("shutoff_date", [ 'type'=>'text', 'value'=>$person->shutoff_date ] );
-        $form->add("shutoff_referredby", [ 'type'=>'text', 'value'=>$person->shutoff_referredby ] );
-        $form->add("family", [ 'type'=>'text', 'value'=>$person->family ] );
-        $form->add("employed", [ 'type'=>'text', 'value'=>$person->employed ] );
-        $form->add("employed_location", [ 'type'=>'text', 'value'=>$person->employed_location ] );
-        $form->add("extra", [ 'type'=>'text', 'value'=>$person->extra ] );
+        $form->add( "name_first", [
+            'type'=>'text',
+            'value'=> $person->name_first,
+            'name' => 'First Name',
+            'required' => true,
+        ]);
+
+        $form->add( "name_last", [
+            'type'=>'text',
+            'value'=> $person->name_first,
+            'name' => 'Last Name',
+            'required' => true,
+        ]);
+
+        $form->add( "phone", [
+            'type'=>'number',
+            'value'=> $person->phone,
+            'min' => 10000000,
+            'max' => 10000000000,
+            'name' => "Phone",
+            'required' => false,
+        ]);
+
+        $form->add( "address", [
+            'type'=>'text',
+            'value'=> $person->address,
+            'name' => 'Address',
+            'required' => false,
+        ]);
+
+        $form->add( "assistance", [
+            'type'=>'text',
+            'value'=> $person->assistance,
+            'name' => 'Assistance',
+            'required' => false,
+        ]);
+
+        $form->add( "shutoff", [
+            'type'=>'boolean',
+            'value'=> $person->shutoff,
+            'controls' => ['shutoff_date', 'shutoff_referredby'],
+            'name' => 'Service Shutoff',
+            'required' => true,
+        ]);
+
+        $form->add( "shutoff_date", [
+            'type'=>'text',
+            'value'=> $person->shutoff_date,
+            'name' => 'Service Shutoff - Date',
+            'required' => false,
+        ]);
+
+        $form->add( "shutoff_referredby", [
+            'type'=>'text',
+            'value'=> $person->shutoff_referredby,
+            'name' => 'Service Shutoff - Referred by',
+            'required' => false,
+        ]);
+
+        $form->add( "employed", [
+            'type'=>'boolean',
+            'value'=> $person->employed,
+            'controls' => ['employed_location'],
+            'name' => 'Employed',
+            'required' => true,
+        ]);
+
+        $form->add( "employed_location", [
+            'type'=>'text',
+            'value'=> $person->employed_location,
+            'name' => 'Employed - Location',
+            'required' => false,
+        ]);
+
+        $form->add( "family", [
+            'type'=>'object',
+            'value'=> $person->family,
+            'base' => [
+                'gender' => [ "Male", "Female" ],
+                'age' => -1,
+                'type' => [ "Child", "Adult", "Descendant" ]
+            ],
+            'name' => 'Family',
+            'required' => false,
+        ]);
+
+        $form->add( "extra", [
+            'type'=>'array',
+            'value'=> $person->extra,
+            'name' => 'Extra Data',
+            'required' => false,
+        ]);
+
 
         // Check if form has been submitted
-        if ($values = $form->values() )
+        if ( $values = $form->values() )
         {
 
-            return [true, json_encode($values)];
+            return [true, json_encode( $values ) ];
         }
 
         // Return the form
-        return [true, (string)$form];
+        return [true, (string)$form ];
     }
 
     /**

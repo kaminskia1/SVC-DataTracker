@@ -15,7 +15,10 @@ $(document).ready( () =>
             success: (a)=>
             {
                 // Remove preexisting classes and bind corresponding one to connection element
-                $("body>header>span.internet-status>span.connection").removeClass("connected disconnected unknown").addClass(a ? 'connected' : 'disconnected').prop("title", a ? "You are connected to the internet." : "You are not connected to the internet.");
+                $("body>header>span.internet-status>span.connection")
+                    .removeClass("connected disconnected unknown")
+                    .addClass(a ? 'connected' : 'disconnected')
+                    .prop("title", a ? "You are connected to the internet." : "You are not connected to the internet.");
 
             }
         });
@@ -187,7 +190,8 @@ $(document).ready( () =>
     window.bind = () =>
     {
         // Dashboard card redirects
-        $("body>div >div>div>div>div.head>i").click( ( a ) => {
+        $("body>div >div>div>div>div.head>i").click( ( a ) =>
+        {
             window.redirect(a.currentTarget.id)
         });
 
@@ -198,7 +202,7 @@ $(document).ready( () =>
         });
 
         // Table CTA Redirects
-        $(" #personList > tbody > tr > td.call-to-action").click((a)=>
+        $(" #personList > tbody > tr > td.call-to-action").click( ( a ) =>
         {
             let x;
             a.currentTarget.classList[1]
@@ -260,18 +264,18 @@ $(document).ready( () =>
 
     };
 
+    // Run bind
+    window.bind();
+
     // Internet status loop, check every minute
     window.connected();
-    setTimeout(()=>
+    setTimeout( () =>
     {
         window.connected();
     }, 60000);
 
-    // Run bind
-    window.bind();
-
     // Navigation Bar Toggle
-    $("header>i").click(()=>
+    $("header>i").click( () =>
     {
         // Flip navigation class based off preexisting class
         if ( $("nav").hasClass("active") )
@@ -285,18 +289,19 @@ $(document).ready( () =>
     });
 
     // Navigation Bar Requests
-    $("nav>ul>li").click((a)=>
+    $("nav>ul>li").click( ( a ) =>
     {
         window.redirect(a.currentTarget.id);
     });
 
     // Bind to barrier aswell
-    $("nav>.barrier").click(()=>
+    $("nav>.barrier").click( () =>
     {
         if ( $("nav").hasClass("active") )
         {
             $("nav").removeClass("active");
         }
     });
+
 
 });

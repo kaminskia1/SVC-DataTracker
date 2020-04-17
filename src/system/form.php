@@ -32,7 +32,49 @@ class Form
      *  'bool'
      * ]
      */
-    private $options = [];
+    private $defaultOptions = [
+        'id' => "form",
+        'title' => "Form",
+        'lang' => []
+    ];
+
+    /**
+     * Default element options
+     */
+    private $defaultElementOptions = [
+        'text' => [
+            '_valueType' => 'string',
+            'min' => 0,
+            'max' => 255,
+            'required' => false,
+        ],
+        'number' => [
+            '_valueType' => "integer",
+            'min' => 0,
+            'max' => 255,
+            'required' => false,
+        ],
+        'object' => [
+            '_valueType' => 'object',
+            'values' => [],
+            'required' => false,
+        ],
+        'select' => [
+            '_valueType' => 'array',
+            'options' => [],
+            'required' => false,
+        ],
+        'boolean' => [
+            '_valueType' => 'boolean',
+            'controls' => [],
+            'required' => false,
+        ],
+        'array' => [
+            '_valueType' => 'array',
+            'values' => [],
+            'required' => false,
+        ]
+    ];
 
     /**
      * @var array Default form values
@@ -50,12 +92,11 @@ class Form
      * @param string $id Form ID
      * @param array $options
      */
-    public function __construct( $id, $title, $options = [] )
+    public function __construct( string $id, array $options = [] )
     {
-        $options['id'] = $id;
-        $options['title'] = $title;
         $this->key = "form_" . $id;
-        $this->options = $options;
+        $this->options = array_merge($this->defaultOptions, $options);
+        $this->options['id'] = $id;
     }
 
     /**
@@ -66,8 +107,33 @@ class Form
      */
     public function add( $id, $options = [] ): void
     {
-        if ( isset( $this->values[$id] ) ) $options['value'] = $this->values[$id];
-        array_merge( $this->callStack, [$id =>$options] );
+        // Verify that the provided type is set and that it exists in the existing set
+        if ( \is_null( $options['type'] ) || \is_null( $this->defaultElementOptions[ $options['type'] ] ) ) throw new \InvalidArgumentException("Invalid element type provided");
+
+        // Remove read-only values from the provided options (keys prefixed with _)
+        foreach ( $options as $k => $v )
+        {
+            if ( \mb_substr( $k, 0, 1 ) == "_" )
+            {
+                unset( $options[ $k ] );
+            }
+        }
+
+        // Add the language key
+        $this->options['lang'][$id] = $options['name'] ?? $id;
+
+        // Decode values if object / array
+        if ( $options['type'] == "array" || $options['type'] == "object" ) $options['values'] = (object)json_decode($options['value']);
+
+        // Merge provided options onto default element options
+        $options = \array_merge( $this->defaultElementOptions[ $options['type'] ], $options );
+
+        /**
+         * @TODO Validate provided value against the base object before adding to callstack, throw nonfatal error and set to blank if invalid
+         * @TODO Validate that provided value datatype is equal to the defaultElementOptions one
+         */
+
+        $this->callStack[$id] = $options;
     }
 
     /**
@@ -90,10 +156,13 @@ class Form
      */
     public function values()
     {
+        if ( is_null( \SVC\System\Request::i()->confirm ) || \SVC\System\Request::i()->confirm != true ) return false;
+
         /**
          * @TODO Check that ' and "" don't get replaced by \Request::i()
          */
-        if ( is_null( $new = \SVC\System\Request::i()->$this->key ) || !json_decode( \SVC\System\Request::i()->$this->key ) ) return false;
+        $key = $this->key;
+        if ( is_null( $new = \SVC\System\Request::i()->$key ) || !json_decode( \SVC\System\Request::i()->$key ) ) return false;
 
         // Cycle through all
         foreach ( $new as $key => $val )
