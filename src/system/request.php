@@ -56,4 +56,9 @@ class Request
         return ( $_SERVER['REQUEST_METHOD'] == "POST" && !empty( $_SERVER['HTTP_X_REQUESTED_WITH'] ) && ( strtolower( $_SERVER['HTTP_X_REQUESTED_WITH'] ) == 'xmlhttprequest' ) );
     }
 
+    public function raw( string $param )
+    {
+        return isset( array_merge($_REQUEST, $_COOKIE)[$param] ) ? array_merge($_REQUEST, $_COOKIE)[$param] : null;
+    }
+
 }

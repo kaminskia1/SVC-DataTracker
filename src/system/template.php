@@ -140,7 +140,110 @@ class Template
      */
     public static function personAdd(): array
     {
-        return [true, ""];
+
+        // Create the form
+        $form = new \SVC\System\Form("personAdd", ['title' => "Add Person", 'cancel' => "dashboard"] );
+
+        $form->add( "name_first", [
+            'type'=>'text',
+            'value'=> "",
+            'name' => 'First Name',
+            'required' => true,
+        ]);
+
+        $form->add( "name_last", [
+            'type'=>'text',
+            'value'=> "",
+            'name' => 'Last Name',
+            'required' => true,
+        ]);
+
+        $form->add( "phone", [
+            'type'=>'number',
+            'value'=> "",
+            'min' => 10000000,
+            'max' => 10000000000,
+            'name' => "Phone",
+            'required' => false,
+        ]);
+
+        $form->add( "address", [
+            'type'=>'text',
+            'value'=> "",
+            'name' => 'Address',
+            'required' => false,
+        ]);
+
+        $form->add( "assistance", [
+            'type'=>'text',
+            'value'=> "",
+            'name' => 'Assistance',
+            'required' => false,
+        ]);
+
+        $form->add( "shutoff", [
+            'type'=>'boolean',
+            'value'=> false,
+            'controls' => ['shutoff_date', 'shutoff_referredby'],
+            'name' => 'Service Shutoff',
+            'required' => true,
+        ]);
+
+        $form->add( "shutoff_date", [
+            'type'=>'text',
+            'value'=> "",
+            'name' => 'Service Shutoff - Date',
+            'required' => false,
+        ]);
+
+        $form->add( "shutoff_referredby", [
+            'type'=>'text',
+            'value'=> "",
+            'name' => 'Service Shutoff - Referred by',
+            'required' => false,
+        ]);
+
+        $form->add( "employed", [
+            'type'=>'boolean',
+            'value'=> false,
+            'controls' => ['employed_location'],
+            'name' => 'Employed',
+            'required' => true,
+        ]);
+
+        $form->add( "employed_location", [
+            'type'=>'text',
+            'value'=> "",
+            'name' => 'Employed - Location',
+            'required' => false,
+        ]);
+
+        $form->add( "family", [
+            'type'=>'object',
+            'value'=> "{}",
+            'base' => [
+                'Gender' => [ "Male", "Female" ],
+                'Age' => -1,
+                'Type' => [ "Child", "Adult", "Descendant" ]
+            ],
+            'name' => 'Family',
+            'required' => false,
+        ]);
+
+        $form->add( "extra", [
+            'type'=>'array',
+            'value'=> "{}",
+            'name' => 'Extra Data',
+            'required' => false,
+        ]);
+
+        if ( $values = $form->values() )
+        {
+            // Return new person if success, error if incomplete
+            return isset($values['_error']) ? [true, json_encode($values['_error'])] : [\SVC\System\PDO::i()->insert()->table("Person")->params($values)->run(), 'personList'];
+        }
+
+        return [true, (string)$form];
     }
 
     /**
@@ -184,7 +287,7 @@ class Template
         $person = new \SVC\Enum\Person([ 'id' => \SVC\System\Request::i()->id ]);
 
         // Create the form
-        $form = new \SVC\System\Form("personEdit", ['title' => "Edit Person"] );
+        $form = new \SVC\System\Form("personEdit", ['title' => "Edit Person", 'cancel' => "personView"] );
 
         // Add form elements
         $form->add( "name_first", [
@@ -265,9 +368,9 @@ class Template
             'type'=>'object',
             'value'=> $person->family,
             'base' => [
-                'gender' => [ "Male", "Female" ],
-                'age' => -1,
-                'type' => [ "Child", "Adult", "Descendant" ]
+                'Gender' => [ "Male", "Female" ],
+                'Age' => -1,
+                'Type' => [ "Child", "Adult", "Descendant" ]
             ],
             'name' => 'Family',
             'required' => false,
@@ -284,8 +387,8 @@ class Template
         // Check if form has been submitted
         if ( $values = $form->values() )
         {
-
-            return [true, json_encode( $values ) ];
+            // Return new person if success, error if incomplete
+            return isset($values['_error']) ? [true, json_encode($values['_error'])] : [(bool)\SVC\System\PDO::i()->update()->table("Person")->params((array)$values)->where([ 'id' => \SVC\System\Request::i()->id ])->run(), 'personView'];
         }
 
         // Return the form
@@ -346,7 +449,69 @@ class Template
      */
     public static function aidAdd(): array
     {
-        return [true, ""];
+        $form = new \SVC\System\Form( "aidAdd", ['title' => "Add Aid", 'cancel' => "dashboard"] );
+
+        // Build pool
+        $pool = [];
+        $pdo = \SVC\System\PDO::i()->select()->params("id,name_first,name_last")->table("Person")->run();
+        for ($i=0;$i<$pdo->count();$i++)
+        {
+            $pool[$pdo->fetch()['id']] = $pdo->fetch()['id'] . ": " . $pdo->fetch()['name_last'] . ", " . $pdo->fetch()['name_first'];
+            $pdo->next();
+        }
+
+        $form->add( "person_id", [
+            'type' =>'select',
+            'value'=> \SVC\System\Request::i()->id,
+            'name' => 'Person ID',
+            'pool' => $pool,
+            'required' => true,
+        ]);
+
+        $form->add( "date", [
+            'type' =>'text',
+            'value'=> "",
+            'name' => 'Date',
+            'required' => true,
+        ]);
+
+        $form->add( "account", [
+            'type'=>'number',
+            'value'=> "",
+            'name' => 'Account',
+            'required' => true,
+        ]);
+
+        $form->add( "given", [
+            'type'=>'text',
+            'value'=> "",
+            'name' => 'Amount Given',
+            'required' => true,
+        ]);
+
+        $form->add( "rent", [
+            'type'=>'text',
+            'value'=> "",
+            'name' => 'Rent',
+            'required' => true,
+        ]);
+
+        $form->add( "landlord_address", [
+            'type'=>'text',
+            'value'=> "",
+            'name' => 'Landlord Address',
+            'required' => true,
+        ]);
+
+        $form->add( "extra", [
+            'type'=>'array',
+            'value'=> "{}",
+            'name' => 'Extra',
+            'required' => true,
+        ]);
+
+
+        return [true, (string)$form];
     }
 
     /**

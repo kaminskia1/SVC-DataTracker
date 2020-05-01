@@ -1,51 +1,67 @@
-<link href="assets/css/form.css" type="text/css" rel="stylesheet" />
+<link href="assets/css/form.css" type="text/css" rel="stylesheet"/>
 <script src="assets/js/form.js"></script>
 
 <form class="form" id="{{ options.id }}">
     <div class="title">{{ options.title }}</div>
     <div class="elements">
         {% for x,y in callstack %}
-        {% if y.required %}
+
+            {% if y.required %}
             <div class="element" id="{{ x }}" aria-required="true" datatype="{{ y.type }}">
-        {% else %}
+
+            {% else %}
             <div class="element" id="{{ x }}" aria-required="false" datatype="{{ y.type }}">
-        {% endif %}
-                <div class="name">{{ options.lang[x] }}: </div>
+
+                {% endif %}
+                <div class="name">{{ options.lang[x] }}:</div>
 
                 {% if y.type == "text" %}
-                    <input type="text" value="{{ y.value }}" minlength="{{ y.min }}" maxlength="{{ y.max }}" />
+                    <input type="text" value="{{ y.value }}" minlength="{{ y.min }}" maxlength="{{ y.max }}"/>
 
                 {% elseif y.type == "number" %}
-                    <input type="number" value="{{ y.value }}" min="{{ y.min }}" max="{{ y.max }}" />
+                    <input type="number" value="{{ y.value }}" min="{{ y.min }}" max="{{ y.max }}"/>
 
                 {% elseif y.type == "boolean" %}
                     {% if y.value %}
                         <input type="checkbox" checked aria-controls="{{ y.controls|json_encode }}"/>
                     {% else %}
-                        <input type="checkbox" aria-controls="{{ y.controls|json_encode }}" />
+                        <input type="checkbox" aria-controls="{{ y.controls|json_encode }}"/>
                     {% endif %}
+
+
+                {% elseif y.type == "select" %}
+                    <select>
+                        {% for z,a in y.pool %}
+                            {% if z == y.value %}
+                                <option selected value="{{ z }}">{{ a }}</option>
+                            {% else %}
+                                <option value="{{ z }}">{{ a }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
 
                 {% elseif y.type == "object" %}
                     <div class="object">
-                        <input class="_base" disabled type="hidden" value="{{ y.base|json_encode }}" />
-                        <input class="_value" disabled type="hidden" value="{{ y.value }}" />
+                        <input class="_base" disabled type="hidden" value="{{ y.base|json_encode }}"/>
+                        <input class="_value" disabled type="hidden" value="{{ y.value }}"/>
                         <div class="container">{# Object element rendered and processed client-side #}</div>
                     </div>
 
                 {% elseif y.type == "array" %}
                     <div class="array">
-                        <input class="_value" disabled type="hidden" value="{{ y.value }}" />
+                        <input class="_value" disabled type="hidden" value="{{ y.value }}"/>
                         <div class="container">{# Array element rendered and processed client-side #}</div>
                     </div>
 
                 {% else %}
-                    <input type="text" disabled value="Error: Invalid element type! ({{ y.type }})" />
+                    <input type="text" disabled value="Error: Invalid element type! ({{ y.type }})"/>
 
                 {% endif %}
             </div>
-        {% endfor %}
-    </div>
+            {% endfor %}
+        </div>
 
-    <div class="button cancel">Cancel</div>
-    <div class="button submit">Save</div>
+        <div class="button cancel">Cancel</div>
+        <div class="button submit">Save</div>
+        <div class="settings">{{ options|json_encode }}</div>
 </form>

@@ -35,6 +35,7 @@ class Form
     private $defaultOptions = [
         'id' => "form",
         'title' => "Form",
+        'cancel' => "",
         'lang' => []
     ];
 
@@ -61,7 +62,7 @@ class Form
         ],
         'select' => [
             '_valueType' => 'array',
-            'options' => [],
+            'pool' => [],
             'required' => false,
         ],
         'boolean' => [
@@ -159,20 +160,34 @@ class Form
         if ( is_null( \SVC\System\Request::i()->confirm ) || \SVC\System\Request::i()->confirm != true ) return false;
 
         /**
-         * @TODO Check that ' and "" don't get replaced by \Request::i()
+         * @TODO Validate JSON structure and provided values to prevent unintended injection
          */
         $key = $this->key;
-        if ( is_null( $new = \SVC\System\Request::i()->$key ) || !json_decode( \SVC\System\Request::i()->$key ) ) return false;
+        if ( is_null( \SVC\System\Request::i()->$key ) || !json_decode( \SVC\System\Request::i()->raw( $key ) ) ) return false;
 
         // Cycle through all
-        foreach ( $new as $key => $val )
+        foreach ( json_decode( \SVC\System\Request::i()->raw( $key ) ) as $key => $val )
         {
             // Verify that the callstack entry exists
             if ( isset( $this->callStack[$key] ) )
             {
-                /**
-                 * @todo Sanitize the new keys
-                 */
+                // Verify that information exists if required entry
+                if ( $this->callStack[$key]['required'] && ( $val == null || $val == "" ) && $this->callStack[$key]['type'] != "boolean")
+                {
+                    // Initialize _error if not already declared
+                    if ( !isset($this->values['_error'] ) ) $this->values['_error'] = [];
+
+                    // Add element key onto error stack
+                    array_push( $this->values['_error'], $key );
+                }
+                else
+                {
+                    /**
+                     * @todo Sanitize the new values
+                     */
+                    $this->values[$key] = $val;
+                }
+
                 // Set the value to the new entry
                 $this->values[$key] = $val;
             }
