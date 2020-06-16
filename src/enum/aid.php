@@ -38,7 +38,9 @@ class Aid extends AbstractEnum
     public function __construct( $p )
     {
         parent::__construct( $p );
-        $this->_aidRecipient = new \SVC\Enum\Person( \SVC\System\PDO::i()->select()->param('*')->table('Person')->where(['id'=>$this->person_id])->run() );
+        $this->_aidRecipient = (array)new \SVC\Enum\Person( \SVC\System\PDO::i()->select()->params('*')->table('Person')->where(['id'=>$this->person_id])->run() );
+        $this->_formattedDate = \date( 'M j, Y', \strtotime( $this->date ) );
+        $this->_formattedExtra = (array)json_decode($this->extra);
     }
 
 }

@@ -164,3 +164,20 @@ form.form div.settings {
     height: 0px;
     width: 0px;
 }
+
+form.form div.element select {
+    display: block;
+    border: 0;
+    min-width: 210px;
+    border-bottom: 1px solid #e0e0e0;
+    outline: 0;
+    font-size: 16px;
+    margin-top: 8px;
+    margin-left: 8px;
+}
+
+
+form.form div.element select:focus {
+    border: 0px;
+    border-bottom: 1px solid #819ca9;
+}

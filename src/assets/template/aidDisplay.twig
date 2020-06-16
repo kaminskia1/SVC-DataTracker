@@ -1,0 +1,62 @@
+<link href="assets/css/display.css" type="text/css" rel="stylesheet" />
+
+<div class="display">
+    <div class="title">
+        <div class="title-main">Aid Entry #{{ id }}</div>
+        <div class="title-sub">Added {{ _formattedDate }}</div>
+    </div>
+
+    <div class="button-container">
+        <div class="button add">Add Entry</div>
+        <div class="button edit">Edit</div>
+        <div class="button delete">Delete</div>
+    </div>
+
+    <div class="card-container">
+        <div class="card info">
+            <div class="card-title">Information</div>
+            <div class="card-content">
+
+                <div class="card-element">Amount Issued: $<span id="p_given">{{ given }}</span></div>
+                <div class="card-element">Account: <span id="p_account">{{ account }}</span></div>
+
+
+
+
+                {% if _formattedExtra|length > 0 %}
+                    <div class="card-element pointer">Extra:</div>
+                    <div class="card-element-dropdown">
+                        {% for x,y in _formattedExtra %}
+                            <div class="card-element-sub p_extra_{{ x }}">{{ x }}: {{ y }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <div class="card-element">Last Modified: {{ last_edited }}</div>
+
+            </div>
+        </div>
+
+        <div class="card-secondary">
+
+            <div class="card contact">
+                <div class="card-title">Issued To</div>
+                <div class="card-content">
+                    <div class="card-element">Person ID: {{ _aidRecipient['id'] }}</div>
+                    <div class="card-element">Name: {{ _aidRecipient['name_last'] }}, {{ _aidRecipient['name_first'] }}</div>
+                    <div class="card-element">Phone: {{ _aidRecipient['phone'] }}</div>
+                    <div class="card-element">Address: {{ _aidRecipient['address'] }}</div>
+                </div>
+            </div>
+
+{#            <div class="card aid">#}
+{#                <div class="card-title">Aid Entries</div>#}
+{#                <div class="card-content">#}
+{#                    {{ _aidTable|raw }}#}
+{#                </div>#}
+{#            </div>#}
+        </div>
+
+    </div>
+
+</div>

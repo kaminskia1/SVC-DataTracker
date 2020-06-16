@@ -117,3 +117,11 @@ div.display div.card div.card-content div.card-element-dropdown {
     line-height: 30px;
     margin-bottom: 16px;
 }
+
+
+
+/* Aid table override */
+div.table-container {
+    width: inherit !important;
+    margin: inherit !important;
+}

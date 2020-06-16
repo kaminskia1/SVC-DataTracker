@@ -202,7 +202,7 @@ $(document).ready( () =>
         });
 
         // Table CTA Redirects
-        $(" #personList > tbody > tr > td.call-to-action").click( ( a ) =>
+        $(" table > tbody > tr > td.call-to-action").click( ( a ) =>
         {
             let x;
             a.currentTarget.classList[1]
@@ -224,7 +224,7 @@ $(document).ready( () =>
             {
                 // Redirect to addAid, id is already present in the URI
                 case 'add':
-                    window.redirect( 'addAid');
+                    window.redirect( 'aidAdd');
                     break;
 
                 case 'edit':

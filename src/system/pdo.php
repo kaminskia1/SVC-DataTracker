@@ -96,10 +96,10 @@ class PDO
         // Check if where
         strtolower( $call ) === "where" ? $arr = [ 'where' => $args[0] ] : null;
 
-        // Verify that call exists
+        // Verify that call stack exists
         if ( !isset( $arr ) ) throw new \InvalidArgumentException();
 
-        // Push to end of callstack
+        // Push to end of call stack
         $this->callStack = array_merge($this->callStack, $arr);
         return $this;
     }

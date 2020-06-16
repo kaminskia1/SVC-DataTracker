@@ -32,6 +32,7 @@ $(document).ready( ()=>
                     let id = $(b).attr("id"), type = $(b).attr("datatype"), res;
                     switch ( type )
                     {
+                        case "select":
                         case "number":
                         case "text":
                             data[ "form_" + $(a.currentTarget).parent()[0].id ][id] = $(b).children()[1].value;
@@ -40,6 +41,7 @@ $(document).ready( ()=>
                         case "boolean":
                             data[ "form_" + $(a.currentTarget).parent()[0].id ][id] = $($(b).children()[1]).is(':checked');
                             break;
+
 
                         case "object":
                             let y = [];

@@ -75,11 +75,12 @@ class PDOSelect
     /**
      * Fetch current row
      *
+     * @param $r Row number to fetch
      * @return array
      */
-    public function fetch(): array
+    public function fetch( $r = null ): array
     {
-        return $this->data[$this->row];
+        return $this->data[$r ?? $this->row];
     }
 
     /**

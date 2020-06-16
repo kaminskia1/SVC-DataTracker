@@ -18,17 +18,19 @@ abstract class AbstractEnum
 
     public function __construct( $p, $i = 0 )
     {
-        switch ( \gettype ( $p ) )
+        switch ( static::varType ( $p ) )
         {
-            case '\SVC\System\PDOSelect':
-                if (count($p) < 1) throw new \InvalidArgumentException("No data provided!");
+            case 'SVC\System\PDOSelect':
 
+                // Check that a single row is provided
                 if ( $p->count() < 1 ) throw new \PDOException('No rows found!');
+                if ( $p->count() > 1 ) throw new \PDOException('Too many rows provided!');
 
-                foreach ( $p->first( $i ) as $k => $v )
+                foreach ( $p->fetch( $i ) as $k => $v )
                 {
                     $this->$k = $v;
                 }
+
                 $this->_data = (array)$p->fetch();
                 break;
 
@@ -76,7 +78,6 @@ abstract class AbstractEnum
     {
         // Compile params
         $p = [];
-        var_dump((array)$this);
         foreach ( (array)$this as $k => $v)
         {
             if ( ( substr($k, 0, 1) != "_" ) && array_key_exists( $k, $this->_data ) && (array)$this->_data[ $k ] !== $v )
@@ -107,6 +108,35 @@ abstract class AbstractEnum
     public function serialize(): string
     {
         return json_encode( $this );
+    }
+
+    /**
+     * Get a variable's type
+     *
+     * @param $var
+     * @return string
+     */
+    public static function varType( $var )
+    {
+        if (\gettype($var) == "object")
+        {
+            if (\get_class($var) == "stdClass") return "object";
+            return get_class($var);
+        }
+        else
+        {
+            return \gettype($var);
+        }
+    }
+
+    /**
+     * Convert the Enum to an array
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return (array)$this->_data;
     }
 
 }

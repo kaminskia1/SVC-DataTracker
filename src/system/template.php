@@ -265,11 +265,11 @@ class Template
         }
         catch( \TypeError $e )
         {
-            return [false, ""];
+            return [true, "<b>TypeError:</b> " + print_r($e)];
         }
         catch( \InvalidArgumentException $e )
         {
-            return [false, ""];
+            return [true, "<b>Invalid Argument Exception:</b> " + print_r($e)];
         }
     }
 
@@ -424,8 +424,12 @@ class Template
                 ],
                 'limit'    => 25,
                 'cta'      => true,
-                'cta_link' => "index.php?view=aidView&id=",
+                'cta_link' => "view=aidView&id=",
                 'process'  => [
+                    'person_id' => function( $v )
+                    {
+                        return implode(", ", \SVC\System\PDO::i()->select()->params("name_first,name_last")->table("Person")->where(['id'=>$v])->run()->fetch() );
+                    },
                     'given' => function( $v )
                     {
                         return "$ " . ( json_decode( $v )->amount ?? 0.0 );
@@ -510,6 +514,11 @@ class Template
             'required' => true,
         ]);
 
+        if ( $values = $form->values() )
+        {
+            // Return new person if success, error if incomplete
+            return isset($values['_error']) ? [true, json_encode($values['_error'])] : [\SVC\System\PDO::i()->insert()->table("Aid")->params($values)->run(), 'aidList'];
+        }
 
         return [true, (string)$form];
     }
@@ -525,18 +534,18 @@ class Template
         {
             $view = \SVC\System\View::create
             (
-                new \SVC\Enum\Person([ 'id' => \SVC\System\Request::i()->id ]),
+                new \SVC\Enum\Aid([ 'id' => \SVC\System\Request::i()->id ]),
                 "aidDisplay.twig"
             );
             return [ true, (string)$view ];
         }
         catch( \TypeError $e )
         {
-            return [false, ""];
+            return [true, "TypeError"];
         }
         catch( \InvalidArgumentException $e )
         {
-            return [false, ""];
+            return [true, $e];
         }
     }
 

@@ -68,7 +68,7 @@ class Table
      *
      * @param array $data
      * @param array $options
-     * @return static
+     * @return Table
      */
     public static function create( array $data, array $options ): self
     {
@@ -98,6 +98,7 @@ class Table
 
         // Bind data
         $table->data = \SVC\System\PDO::i()->select();
+
         // Merge user provided options onto default ones
         $table->options = array_merge($table->defaultDBOptions, $options);
 
@@ -124,7 +125,7 @@ class Table
     }
 
     /**
-     * Convert the table into something viewable
+     * Convert the table into a displayable string
      *
      * @return string
      */
@@ -142,20 +143,23 @@ class Table
                     }
                     else
                     {
-                        // Explode value into indexible array if string provided
-                        if ( is_string($val) ) $val = explode( ",", $val );
-
-                        // Cycle through each row
-                        foreach ($this->data as $i => $row)
+                        if ($val != "*")
                         {
-                            // Cycle through each collumn value
-                            foreach ($row as $k => $v)
+                            // Explode value into indexible array if string provided
+                            if ( is_string($val) ) $val = explode( ",", $val );
+
+                            // Cycle through each row
+                            foreach ($this->data as $i => $row)
                             {
-                                // Check if key is present in include array
-                                if ( !in_array( $k, $val ) )
+                                // Cycle through each collumn value
+                                foreach ($row as $k => $v)
                                 {
-                                    // Pop!
-                                    unset( $this->data[$i][$k] );
+                                    // Check if key is present in include array
+                                    if ( !in_array( $k, $val ) )
+                                    {
+                                        // Pop!
+                                        unset( $this->data[$i][$k] );
+                                    }
                                 }
                             }
                         }
@@ -268,4 +272,13 @@ class Table
         ]);
     }
 
+    /**
+     * Convert the table data into an array
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return (array)$this->data;
+    }
 }

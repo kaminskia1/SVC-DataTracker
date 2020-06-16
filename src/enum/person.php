@@ -48,11 +48,14 @@ class Person extends AbstractEnum
     public function __construct( $p )
     {
         parent::__construct( $p );
+
+        // Grab aid table data
         $q = \SVC\System\PDO::i()->select()->params('*')->table('Aid')->where([ 'id' => $this->id ])->run();
         $arr = [];
         for ($i=0;$i<$q->count();$i++)
         {
-            array_push($arr, new \SVC\Enum\Report($q, $i) );
+            $tmp = new \SVC\Enum\Report($q, $i);
+           array_push($arr, $tmp->toArray() );
         }
 
         // Format phone
@@ -82,14 +85,32 @@ class Person extends AbstractEnum
         $this->_totalAidGiven = (float)0.00;
         $this->_aidTable = \SVC\System\Table::create( $arr, [
             'title' => "",
-            'forceAjax' => true,
+            //'forceAjax' => true,
             'limit' => 8,
-            'cta' => true
+            'lang' => [
+                'date' => 'Date',
+                'given' => 'Amount'
+            ],
+            'include' => [
+                'date',
+                'given'
+            ],
+            'process' => [
+                'date' => function( $v )
+                {
+                    return \date( 'M j, Y', \strtotime( $v ) );
+                },
+                'given' => function( $v )
+                {
+                    return "$" . $v;
+                }
+            ],
+            'cta' => false
         ] );
 
         foreach( $this->_aidEntries as $v )
         {
-            $this->_totalAidGiven += $v->given;
+            $this->_totalAidGiven += (int)$v['given'];
         }
     }
 

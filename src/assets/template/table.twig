@@ -1,7 +1,9 @@
 <link rel="stylesheet" type="text/css" href="assets/css/table.css" />
 
 <div class="table-container {{ options.id }}">
-    <div class="title">{{ options.title }}</div>
+    {% if options.title != "" %}
+        <div class="title">{{ options.title }}</div>
+    {% endif %}
 
     <table id="{{ options.id }}" cellspacing="0">
         <thead>
