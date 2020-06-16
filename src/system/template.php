@@ -48,18 +48,18 @@ class Template
                     'content' => 'Default Content',
                     'callback' => 'aidAdd'
                 ],
-                [
-                    'icon' => 'fa fa-file',
-                    'name' => "View Reports",
-                    'content' => 'Default Content',
-                    'callback' => 'reportList'
-                ],
-                [
-                    'icon' => 'fa fa-plus',
-                    'name' => "Add Reports",
-                    'content' => 'Default Content',
-                    'callback' => 'reportAdd'
-                ],
+//                [
+//                    'icon' => 'fa fa-file',
+//                    'name' => "View Reports",
+//                    'content' => 'Default Content',
+//                    'callback' => 'reportList'
+//                ],
+//                [
+//                    'icon' => 'fa fa-plus',
+//                    'name' => "Add Reports",
+//                    'content' => 'Default Content',
+//                    'callback' => 'reportAdd'
+//                ],
             ]
         ])];
     }

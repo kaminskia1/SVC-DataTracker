@@ -132,21 +132,21 @@ class Init
                     'callback'=>'aidAdd',
                     'public_name'=>"Add Aid",
                 ],
-
-                [
-                    'callback'=>'_title',
-                    'title'=>"Report",
-                ],
-                [
-                    'icon'=>'fa fa-file',
-                    'callback'=>'reportList',
-                    'public_name'=>'View Reports',
-                ],
-                [
-                    'icon'=>'fa fa-plus',
-                    'callback'=>'reportAdd',
-                    'public_name'=>"Generate Report",
-                ],
+//
+//                [
+//                    'callback'=>'_title',
+//                    'title'=>"Report",
+//                ],
+//                [
+//                    'icon'=>'fa fa-file',
+//                    'callback'=>'reportList',
+//                    'public_name'=>'View Reports',
+//                ],
+//                [
+//                    'icon'=>'fa fa-plus',
+//                    'callback'=>'reportAdd',
+//                    'public_name'=>"Generate Report",
+//                ],
 
             ]
         ]));
