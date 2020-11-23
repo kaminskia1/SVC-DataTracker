@@ -67,6 +67,4 @@ Aid
 Report
 	View Reports => reportList
 	Generate Report => reportGenerate
-```
-
-(php is gross)
+``
