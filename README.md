@@ -1,4 +1,7 @@
-# SVC-People-Tracker
+# SVC PeopleTracker
+
+[![Updated Badge](https://img.shields.io/github/last-commit/kaminskia1/SVC-People-Tracker)](https://github.com/kaminskia1/archer/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ### Requirements
 	- Composer (>= 1.9.3) [Pre-packaged in release]
